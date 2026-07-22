@@ -1,0 +1,27 @@
+---
+title: "Software architecture that lasts"
+description: "Boundaries, single sources of truth and explicit lifecycles — the architectural habits that keep systems maintainable."
+date: "2024-06-05"
+tags: ["Architecture", "Engineering"]
+---
+
+Architecture isn't diagrams for their own sake — it's the set of decisions that
+make a system easy or painful to change six months from now.
+
+## One source of truth
+
+For every important fact, there should be exactly one place that owns it. In
+Flayona, the database owns financial state; the UI reflects it and never invents
+it.
+
+## Boundaries you can point to
+
+Keep the layers explicit: presentation, application logic, domain, data. When a
+change touches only one layer, you've drawn the boundaries well.
+
+## Make the implicit explicit
+
+Lifecycles, permissions and workflows should be written down in code — state
+machines and capability tables — not implied by a tangle of conditionals.
+
+> A deeper piece on modular monoliths vs services is in the works.

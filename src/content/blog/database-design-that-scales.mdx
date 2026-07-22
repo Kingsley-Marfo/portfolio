@@ -1,0 +1,29 @@
+---
+title: "Database design that scales"
+description: "Normalisation, constraints and modelling invariants at the schema level so bad data simply cannot exist."
+date: "2024-08-14"
+tags: ["Databases", "Backend", "Architecture"]
+draft: false
+---
+
+The database is the one part of your system that outlives every rewrite of the
+UI. It's worth getting right.
+
+## Model invariants as constraints
+
+If an instalment cannot exist without a plan, enforce that with a foreign key —
+don't rely on application code to remember. The database is the last line of
+defence against impossible states.
+
+## Normalise until it hurts, then stop
+
+Normalise to keep data consistent and avoid duplication. Denormalise
+deliberately, only where you've measured a real read-performance need — never by
+default.
+
+## Money and time are special
+
+Store money as integer minor units. Store timestamps in UTC. These two rules
+prevent an entire category of bugs.
+
+> More posts on indexing strategy and migrations coming soon.

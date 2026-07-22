@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" fill="none" role="img" aria-label="Professional portrait placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1424"/>
+      <stop offset="1" stop-color="#111a2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.55">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <rect width="800" height="1000" fill="url(#glow)"/>
+  <circle cx="400" cy="400" r="150" fill="#1c2740"/>
+  <circle cx="400" cy="345" r="66" fill="#3b82f6" fill-opacity="0.85"/>
+  <path d="M262 520c0-76 62-138 138-138s138 62 138 138v40H262v-40z" fill="#3b82f6" fill-opacity="0.85"/>
+  <text x="400" y="700" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="44" font-weight="700" fill="#e9edf5">Kingsley Marfo</text>
+  <text x="400" y="748" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="26" fill="#97a2b5">Software Engineer</text>
+  <text x="400" y="900" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="20" fill="#5b6472">Replace public/avatar.svg with your portrait</text>
+</svg>

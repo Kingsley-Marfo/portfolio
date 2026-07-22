@@ -1,0 +1,27 @@
+---
+title: "Designing REST APIs people enjoy using"
+description: "Predictable resources, honest status codes and idempotency — the small decisions that make an API pleasant."
+date: "2024-07-21"
+tags: ["APIs", "Backend"]
+---
+
+A good API is boring in the best way — predictable, consistent and hard to
+misuse.
+
+## Resources, not actions
+
+Model nouns (`/orders`, `/orders/:id/instalments`) and let HTTP verbs express the
+action. Consistency across endpoints means a developer can guess the next one.
+
+## Tell the truth with status codes
+
+`200` for success, `201` for creation, `400` for bad input, `401`/`403` for auth,
+`409` for conflicts, `422` for validation. Honest codes let clients handle
+failures without parsing prose.
+
+## Make writes idempotent
+
+Any write that could be retried — payments especially — should accept an
+idempotency key so a repeat request is safe.
+
+> A follow-up on pagination, versioning and error envelopes is on the way.
