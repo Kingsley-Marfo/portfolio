@@ -4,71 +4,112 @@ export type SkillGroup = {
   skills: string[];
 };
 
+/**
+ * Every skill here is directly verified against the CV's Technical Skills
+ * section or confirmed in source code for a real project. Tools/frameworks
+ * used only to build this portfolio site (Next.js, TypeScript) are
+ * intentionally excluded from professional-work claims — see the About page
+ * for that distinction.
+ */
 export const skillGroups: SkillGroup[] = [
   {
     category: "Languages",
-    description: "Typed and dynamic languages I ship production code in.",
-    skills: ["PHP", "Python", "JavaScript", "TypeScript", "SQL", "HTML5", "CSS3"],
+    description: "Core languages used across production and academic work.",
+    skills: ["PHP", "Python", "Java", "JavaScript", "SQL", "HTML5", "CSS3"],
   },
   {
-    category: "Frameworks",
-    description: "For building web apps, APIs and interfaces.",
-    skills: ["FastAPI", "React", "Next.js", "Vite", "Tailwind CSS", "WordPress / Elementor"],
+    category: "Frontend",
+    description: "Building responsive, installable interfaces.",
+    skills: [
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "Responsive web design",
+      "Progressive Web Apps",
+      "Service workers",
+      "WordPress",
+    ],
   },
   {
     category: "Backend",
-    description: "Designing services, domain models and business logic.",
+    description: "Services, APIs and business logic.",
     skills: [
-      "REST APIs",
-      "SQLAlchemy ORM",
-      "Alembic migrations",
-      "MVC architecture",
-      "WebSockets",
-      "Cron / scheduled jobs",
+      "FastAPI",
+      "REST API development",
+      "Authentication & authorisation",
+      "Session management",
+      "Background processing",
+      "Webhook processing",
+      "SMTP / transactional messaging",
     ],
   },
   {
     category: "Databases",
-    description: "Relational modelling, migrations and query design.",
-    skills: ["MySQL", "PostgreSQL", "Supabase", "Schema design", "Normalisation", "Soft deletes"],
-  },
-  {
-    category: "Cloud & DevOps",
-    description: "Shipping and operating software in production.",
-    skills: ["Render", "Supabase", "IONOS", "Git & GitHub", "PWA / Service Workers", "CI"],
-  },
-  {
-    category: "Security",
-    description: "Protecting users, data and money.",
+    description: "Relational modelling and data integrity.",
     skills: [
-      "RBAC",
-      "JWT & bcrypt",
-      "TOTP / 2FA",
-      "CSRF protection",
-      "KYC & credit scoring",
-      "Audit logging",
+      "MySQL",
+      "PostgreSQL",
+      "Entity-relationship modelling",
+      "Schema design",
+      "Prepared statements",
+      "Database migrations",
     ],
   },
   {
-    category: "APIs & Payments",
-    description: "Integrating third-party platforms reliably.",
-    skills: ["Paystack", "Mobile Money (MoMo)", "WhatsApp API", "SMS / OTP", "Webhooks", "Idempotency"],
-  },
-  {
-    category: "Tools",
-    description: "The day-to-day engineering toolchain.",
-    skills: ["Git", "GitHub", "VS Code", "pytest", "Postman", "Alembic", "Figma"],
-  },
-  {
-    category: "Engineering",
-    description: "How I think about building software.",
+    category: "APIs & Integrations",
+    description: "Third-party platforms integrated into production systems.",
     skills: [
-      "System design",
-      "Workflow state machines",
-      "Accessibility (WCAG)",
-      "Automated testing",
-      "Technical writing",
-      "Performance",
+      "Paystack API",
+      "WhatsApp Cloud API",
+      "SMS gateways",
+      "Mobile Money payments",
+      "Card payments",
+      "Webhooks",
+    ],
+  },
+  {
+    category: "Security",
+    description: "Protecting users, data and money end to end.",
+    skills: [
+      "Role-based access control",
+      "JWT authentication",
+      "TOTP two-factor authentication",
+      "bcrypt password hashing",
+      "CSRF protection",
+      "Rate limiting",
+      "Account lockout",
+      "Audit logging",
+      "HMAC-SHA512 signature verification",
+      "Idempotent payment processing",
+      "OWASP-aware development",
+      "Passwordless OTP verification",
+    ],
+  },
+  {
+    category: "Cloud & Deployment",
+    description: "Shipping and operating software in production.",
+    skills: [
+      "Apache",
+      "Linux hosting",
+      "IONOS hosting",
+      "HTTPS / SSL/TLS / HSTS",
+      "DNS configuration",
+      "SFTP deployment",
+      "Scheduled background jobs",
+    ],
+  },
+  {
+    category: "Tools & Practices",
+    description: "How I plan, build and ship.",
+    skills: [
+      "Git & GitHub",
+      "VS Code",
+      "Postman",
+      "Requirements gathering",
+      "Software architecture",
+      "Technical documentation",
+      "Client communication",
+      "Production debugging",
     ],
   },
 ];

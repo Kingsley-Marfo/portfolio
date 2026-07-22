@@ -17,8 +17,8 @@ export default function ProjectsPage() {
     <>
       <PageHeader
         eyebrow="Case studies"
-        title="Production systems, documented like engineering."
-        description="Not screenshots and one-liners — each project is a full case study covering the problem, architecture, database design, implementation decisions, challenges and lessons learned."
+        title="Client work, a final-year project, and academic coursework."
+        description="Each project is a full case study covering the business problem, my engineering contribution, architecture and lessons learned. Client and commercial work is described without exposing confidential source or business logic."
       />
 
       <Section>

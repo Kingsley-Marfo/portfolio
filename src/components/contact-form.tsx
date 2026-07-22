@@ -14,11 +14,13 @@ const fieldBase =
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
     setErrors({});
+    setErrorMessage(null);
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
@@ -38,6 +40,7 @@ export function ContactForm() {
 
       const json = await res.json().catch(() => ({}));
       if (json.errors) setErrors(json.errors);
+      if (json.error) setErrorMessage(json.error);
       setStatus("error");
     } catch {
       setStatus("error");
@@ -118,11 +121,15 @@ export function ContactForm() {
 
       {status === "error" && !Object.keys(errors).length ? (
         <p className="mt-4 text-sm text-red-500">
-          Something went wrong. Please email me directly at{" "}
-          <a className="underline" href={siteConfig.socials.email}>
-            {siteConfig.email}
-          </a>
-          .
+          {errorMessage || (
+            <>
+              Something went wrong. Please email me directly at{" "}
+              <a className="underline" href={siteConfig.socials.email}>
+                {siteConfig.email}
+              </a>
+              .
+            </>
+          )}
         </p>
       ) : null}
 

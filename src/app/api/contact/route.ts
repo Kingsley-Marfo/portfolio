@@ -13,7 +13,40 @@ type Payload = {
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Best-effort in-memory rate limit: 3 submissions per IP per 10 minutes.
+ * This resets on cold start (serverless functions aren't long-lived), so it
+ * isn't a hard guarantee — but it's a real, free deterrent against a script
+ * hammering the endpoint within a warm instance, with no extra infra.
+ */
+const RATE_LIMIT = 3;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const hits = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = hits.get(ip);
+  if (!entry || now > entry.resetAt) {
+    hits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > RATE_LIMIT;
+}
+
 export async function POST(request: Request) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Too many messages sent. Please try again in a few minutes." },
+      { status: 429 }
+    );
+  }
+
   let body: Payload;
   try {
     body = await request.json();

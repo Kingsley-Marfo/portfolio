@@ -6,13 +6,12 @@ export const siteConfig = {
   name: "Kingsley Marfo",
   role: "Software Engineer",
   // A tight, recruiter-facing positioning line.
-  tagline:
-    "Software Engineer building secure, scalable web applications, FinTech platforms and enterprise software.",
+  tagline: "Software Engineer building secure FinTech, e-commerce and enterprise software.",
   summary:
-    "Full-stack and backend engineer specialising in production systems — payments, BNPL, authentication, KYC and role-based enterprise platforms. I turn real business problems into reliable, well-architected software.",
+    "Full-stack and backend developer specialising in secure authentication, payment systems, APIs, scalable web applications and business workflow automation.",
   url: "https://portfolio.opfix.co.uk",
   domain: "portfolio.opfix.co.uk",
-  location: "United Kingdom",
+  location: "Dunstable, United Kingdom",
   email: "Kingsley.Marfo@opfix.co.uk",
   cvPath: "/kingsley-marfo-cv.pdf",
   avatar: "/profile.png",
@@ -22,14 +21,9 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/in/kingsley-a-marfo-kwesi",
     email: "mailto:Kingsley.Marfo@opfix.co.uk",
   },
-  // Recruiter-facing one-word brand pillars.
-  brand: [
-    "Software Engineer",
-    "Full-Stack Developer",
-    "Backend Developer",
-    "FinTech Engineer",
-    "Enterprise Software Engineer",
-  ],
+  // Kept deliberately short — see audit: 5 near-duplicate labels read as
+  // keyword-stuffing. Two is enough to position without repeating the H1.
+  brand: ["Full-Stack Developer", "Backend Engineer"],
 } as const;
 
 export type NavItem = { title: string; href: string };

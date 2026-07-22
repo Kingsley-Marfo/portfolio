@@ -3,6 +3,21 @@ export type Feature = { title: string; description: string };
 export type NamedBlock = { title: string; description: string };
 export type Screenshot = { alt: string; caption: string; src?: string };
 
+/**
+ * Classification drives what's shown for each project:
+ *  - "Client Project"                — commercial work for a client. Never
+ *    link source code; only features, technologies and engineering
+ *    contribution are shown.
+ *  - "Commercial Development Planned" — a project (currently OpFix) intended
+ *    for future commercialisation. No public source link.
+ *  - "Public Engineering Showcase"    — the one project where a public
+ *    repository is appropriate once it exists.
+ */
+export type ProjectStatus =
+  | "Client Project"
+  | "Commercial Development Planned"
+  | "Public Engineering Showcase";
+
 export type Project = {
   slug: string;
   title: string;
@@ -11,13 +26,13 @@ export type Project = {
   year: string;
   role: string;
   timeline: string;
-  status: "Production" | "Client project" | "Academic" | "Live";
+  status: ProjectStatus;
   featured: boolean;
   order: number;
-  accent: string; // hex used for subtle per-project theming
-  summary: string; // short — used on cards
+  accent: string;
+  summary: string;
   metrics: { label: string; value: string }[];
-  primaryStack: string[]; // condensed for cards
+  primaryStack: string[];
   links: { live?: string; github?: string };
 
   // --- Case study body ---
@@ -41,178 +56,104 @@ export type Project = {
 
 export const projects: Project[] = [
   /* ================================================================ */
-  /*  FLAYONA                                                          */
+  /*  FLAYONA — Client Project (confidential)                          */
   /* ================================================================ */
   {
     slug: "flayona",
     title: "Flayona",
     tagline:
-      "A Ghana-focused e-commerce & BNPL platform in vanilla PHP — Paystack, Mobile Money, KYC and four role portals.",
-    category: "FinTech · E-commerce · Full-Stack",
-    year: "2024",
-    role: "Founder & Full-Stack Engineer",
-    timeline: "Ongoing",
-    status: "Production",
+      "A multi-vendor e-commerce and FinTech platform for a commercial client — BNPL lending, Paystack + Mobile Money, four secure authentication domains.",
+    category: "FinTech · E-commerce · Client Project",
+    year: "2025",
+    role: "Freelance Software Developer (Contract)",
+    timeline: "2025 — Present",
+    status: "Client Project",
     featured: true,
     order: 1,
     accent: "#e11d48",
     summary:
-      "A production commerce platform for imported goods in Ghana — card and Mobile Money payments, a Buy-Now-Pay-Later engine with credit scoring, KYC onboarding, and four separate authenticated portals, all built in vanilla PHP + MySQL.",
+      "A production e-commerce marketplace built for a commercial client — distributor-specific pricing, variant-level inventory, region-based fulfilment, and a configurable Buy-Now-Pay-Later lending system with KYC onboarding. Delivered under contract; implementation details and source remain client-confidential.",
     metrics: [
-      { label: "Portals", value: "4 roles" },
+      { label: "Engagement", value: "Client contract" },
       { label: "Payments", value: "Paystack + MoMo" },
-      { label: "Credit", value: "BNPL engine" },
+      { label: "Lending", value: "BNPL, 1–24mo" },
     ],
-    primaryStack: ["PHP", "MySQL", "Paystack", "Mobile Money", "PWA"],
+    primaryStack: ["PHP", "MySQL", "Paystack API", "WhatsApp Cloud API"],
     links: { live: "https://flayona.com" },
     overview: [
-      "Flayona is a Ghana-focused e-commerce marketplace for genuine imported (“abrokyire”) goods, sold at fair local prices, delivered by region and paid for via card or Mobile Money. It is a real, live platform — and because it handles money and extends credit, correctness and security sit at its core.",
-      "I built the whole system in deliberately lean technology: vanilla PHP and MySQL, server-rendered, installable as a PWA and fast on low-end Android devices. On top of that foundation sit a Buy-Now-Pay-Later engine, KYC onboarding, and four distinct authenticated portals — customer, admin, credit officer and distributor.",
+      "Flayona is a multi-vendor e-commerce and FinTech platform I built under contract for a commercial client, supporting distributor-specific pricing, variant-level inventory and region-based fulfilment — sold at fair local prices and paid for via card or Mobile Money.",
+      "This is client-confidential work: the case study below describes my engineering contribution, the technologies used and the problems solved. Source code, internal business logic and proprietary workflows are not shared, in line with the client agreement.",
     ],
     problem: [
-      "Shoppers in Ghana want access to genuine imported goods at fair local prices, with payment options that match how people actually pay — Mobile Money as much as cards — and the flexibility to spread the cost.",
-      "Delivering that safely is hard. You need reliable payments across two very different rails, a way to extend credit without getting burned, identity verification before credit is granted, and separate, secure workspaces for the different people who run the business — all while staying fast on cheap Android phones on patchy connections.",
+      "The client needed a platform where different distributors could sell the same catalogue at different, region-specific prices, with real payment options — card and Mobile Money — and a way to extend short-term credit to customers without taking on undue risk.",
+      "That meant building payment reconciliation that never double-counts, an identity-verified lending flow, and account security strong enough for four different types of user (customers, distributors, admin staff and credit officers) sharing one platform.",
     ],
     requirements: [
-      "Accept both card payments (Paystack) and Mobile Money.",
-      "Offer a Buy-Now-Pay-Later option with credit scoring and instalments.",
-      "Verify customer identity (KYC) before credit is extended.",
-      "Provide separate secure portals for customers, admins, credit officers and distributors.",
-      "Protect every portal with strong authentication and 2FA.",
-      "Run fast and installable (PWA) on low-end Android, even offline for browsing.",
-    ],
-    research: [
-      "Studied Paystack's payment and webhook lifecycle to reconcile orders reliably.",
-      "Mapped the Mobile Money flow used locally — where the order/PO number becomes the payment reference and is confirmed over WhatsApp.",
-      "Reviewed the OWASP Top 10 and applied it to authentication, CSRF, input handling and access control across all four portals.",
+      "Distributor-specific pricing and variant-level inventory per region.",
+      "Card payments (Paystack) and Mobile Money, reconciled reliably.",
+      "A configurable Buy-Now-Pay-Later lending product with KYC.",
+      "Four separate, securely authenticated user types.",
+      "Secure handling of identity documents submitted for KYC.",
     ],
     solution: [
-      "The storefront is server-rendered PHP with a shared library of includes for auth, cart, payments, KYC and audit. It ships as a PWA with a service worker for installability and offline read-only browsing.",
-      "Pricing is distributor-driven: a master catalogue holds a reference price and the admin's private cost, but the price a customer actually pays is set by the distributor serving their region. Orders carry a kind (standard, pre-order or BNPL) and a fulfilment type (delivery, pickup or rider).",
-      "Standard orders take no card online — the customer places the order, receives an invoice with a payment reference (PO number), pays by Mobile Money and confirms on WhatsApp. Pre-order deposits are collected online via Paystack, whose webhook is signature-verified and reconciles the order.",
-      "The BNPL engine runs a credit score, generates a digital contract and an instalment schedule, and a scheduled cron job automatically charges instalments as they fall due — all gated behind KYC verification and available to Flayona Plus members.",
-      "Each of the four portals has its own authentication guard, TOTP two-factor authentication and password-reset flow, with CSRF protection and an append-only audit log across the platform.",
+      "I designed and deployed the platform in vanilla PHP and MySQL, delivering the full lifecycle from requirements gathering and database modelling through architecture, production deployment, scheduled processing and post-launch support.",
+      "The BNPL product is configurable end to end: 1–24 month repayment terms, tiered flat-interest pricing from 0–22%, automated instalment scheduling and capped, non-compounding late fees — gated behind KYC verification.",
+      "Paystack card payments and Mobile Money are both integrated, with HMAC-SHA512 webhook signature verification, idempotent processing and race-safe transaction reconciliation so a retried or duplicate event can never double-apply.",
+      "Four secure authentication domains — customers, distributors, administrators and Credit Officers — each carry TOTP two-factor authentication, account lockout, passwordless OTP and role-based access control.",
     ],
     architecture: {
       description: [
-        "Flayona is a server-rendered PHP application over MySQL (mysqli). Cross-cutting concerns live in a shared `includes/` layer — authentication guards per role, CSRF, Paystack, BNPL, credit scoring, KYC upload, audit logging, mailer/SMS/WhatsApp and region logic — so each page composes the same vetted building blocks.",
-        "Four separate portals sit behind their own auth guards: the customer storefront, the admin back office, the credit-officer portal that reviews BNPL applications, and the distributor portal with its own POS, stock and orders.",
-        "Payment is asynchronous by design: standard orders resolve out-of-band via Mobile Money and WhatsApp confirmation, pre-order deposits go through a signature-verified Paystack webhook, and a cron job drives automated BNPL instalment charging independently of any user session.",
+        "Flayona is a server-rendered PHP application over MySQL, installed as a PWA. Cross-cutting concerns — authentication guards per role, CSRF, payments, KYC upload, credit logic and audit logging — live in a shared library so every page composes the same vetted building blocks.",
+        "Specific internal architecture, schema and business-logic details are withheld here as client-confidential; the diagram below shows the shape of the system at the level appropriate for a public case study.",
       ],
       diagram: `flowchart TB
-    C["Customer (PWA)"] --> APP["Server-rendered PHP<br/>+ shared includes/"]
+    C["Customer (PWA)"] --> APP["Server-rendered PHP<br/>+ shared auth/security layer"]
     ADM["Admin"] --> APP
     CO["Credit Officer"] --> APP
-    DIST["Distributor (POS)"] --> APP
-    APP --> AUTH["Per-role auth guards<br/>+ CSRF + TOTP 2FA"]
+    DIST["Distributor"] --> APP
+    APP --> AUTH["Per-role auth<br/>+ CSRF + TOTP 2FA"]
     AUTH --> DB[("MySQL")]
-    APP --> AUDIT["Audit log"]
-    APP --> MOMO["Mobile Money<br/>(PO ref · WhatsApp confirm)"]
-    APP --> PAY["Paystack<br/>(pre-order deposits)"]
-    PAY --> WH["Signed webhook<br/>reconciles orders"]
+    APP --> PAY["Paystack API"]
+    PAY --> WH["HMAC-SHA512 verified webhook<br/>idempotent reconciliation"]
     WH --> DB
-    DIST --> PRICE["Region pricing + stock"]
-    PRICE --> DB
-    CRON["Cron: BNPL charging"] --> BNPL["BNPL + credit score"]
-    BNPL --> DB`,
-    },
-    database: {
-      description: [
-        "The live schema (30+ tables) is organised around commerce and credit. Customers place orders of order items, settled through order payments; a master products table carries a reference price and admin cost, while distributor_products sets the region-specific price and distributor_variant_stock the stock. BNPL orders link to KYC applications, credit scores and instalments.",
-        "Roles are separated at the data layer — admins, credit officers and distributors are distinct account types with their own credentials and TOTP secrets — and cross-cutting tables cover regions, promotions, reviews, loyalty points, Flayona Plus subscriptions and an append-only audit log.",
-      ],
-      diagram: `erDiagram
-    CUSTOMER ||--o{ ORDER : places
-    CUSTOMER ||--o| BNPL_KYC_APPLICATION : submits
-    CUSTOMER ||--o| CUSTOMER_CREDIT_SCORE : scored_by
-    ORDER ||--o{ ORDER_ITEM : contains
-    ORDER ||--o{ ORDER_PAYMENT : settled_by
-    ORDER ||--o| BNPL_ORDER : may_be
-    BNPL_ORDER ||--o{ BNPL_INSTALLMENT : schedules
-    PRODUCT ||--o{ ORDER_ITEM : listed_in
-    DISTRIBUTOR ||--o{ DISTRIBUTOR_PRODUCT : prices
-    PRODUCT ||--o{ DISTRIBUTOR_PRODUCT : priced_as
-    REGION ||--o{ DISTRIBUTOR : served_by
-    CUSTOMER {
-      int id PK
-      string phone
-      int region_id FK
-    }
-    ORDER {
-      int id PK
-      int customer_id FK
-      string po_ref
-      enum order_kind
-      enum fulfilment_type
-    }
-    ORDER_PAYMENT {
-      int id PK
-      int order_id FK
-      enum method
-      enum status
-    }
-    DISTRIBUTOR_PRODUCT {
-      int distributor_id FK
-      int product_id FK
-      decimal price
-    }
-    BNPL_INSTALLMENT {
-      int id PK
-      int bnpl_order_id FK
-      date due_date
-      enum status
-    }`,
+    APP --> MOMO["Mobile Money"]
+    APP --> KYC["KYC: Ghana Card, payslip, selfie<br/>private, ownership-checked storage"]`,
     },
     features: [
-      { title: "Four role portals", description: "Separate authenticated workspaces for customers, admins, credit officers and distributors — each with its own login, 2FA and reset flow." },
-      { title: "Region-based distributor pricing", description: "A master catalogue with reference price and admin cost, where the price a customer pays is set by their region's serving distributor." },
-      { title: "Mobile Money checkout", description: "No card taken online for standard orders — an invoice with a PO reference, paid by Mobile Money and confirmed over WhatsApp." },
-      { title: "Paystack pre-order deposits", description: "Online deposits for pre-orders via Paystack, with a signature-verified webhook that reconciles the order." },
-      { title: "Buy-Now-Pay-Later engine", description: "Credit scoring, a digital BNPL contract and an instalment schedule, all gated behind KYC." },
-      { title: "Flayona Plus membership", description: "A paid subscription unlocking BNPL, priority pre-orders and member-only deals." },
-      { title: "Automated instalment charging", description: "A cron job charges BNPL instalments as they fall due, independent of any user session." },
-      { title: "KYC onboarding", description: "Document upload and verification that gates access to credit." },
-      { title: "Distributor POS & stock", description: "Distributors run point-of-sale, manage stock and fulfil orders from their own portal." },
-      { title: "Regional delivery", description: "Region-aware delivery pricing and messaging tailored to how goods move from the Accra hub." },
-      { title: "Loyalty, reviews & promotions", description: "Customer loyalty, product reviews, professional discounts, preorders and promotional campaigns." },
-      { title: "Audit logging & 2FA", description: "TOTP two-factor auth across portals, CSRF protection and an append-only audit trail." },
+      { title: "Distributor-specific pricing", description: "Region-based fulfilment with per-distributor pricing and variant-level inventory." },
+      { title: "Configurable BNPL lending", description: "1–24 month terms, tiered flat-interest pricing (0–22%), automated instalments, capped non-compounding late fees." },
+      { title: "Paystack + Mobile Money", description: "Card and Mobile Money payments, reconciled via HMAC-SHA512 verified, idempotent webhooks." },
+      { title: "Four secure authentication domains", description: "Customers, distributors, admins and Credit Officers — each with TOTP 2FA, account lockout and passwordless OTP." },
+      { title: "KYC document handling", description: "Ghana Cards, payslips and selfies stored privately behind ownership-checked, authenticated access." },
+      { title: "Loyalty, promotions & internal credit scoring", description: "Configurable loyalty, membership, pre-order, professional-discount and internal credit-scoring capabilities." },
     ],
     implementation: [
-      { title: "Lean, deliberate stack", description: "Vanilla PHP + MySQL with no framework or build step — chosen so the app stays fast and installable on low-end Android WebViews." },
-      { title: "Shared includes layer", description: "Auth, CSRF, payments, BNPL, KYC and audit all live in one vetted `includes/` layer that every page composes." },
-      { title: "Per-role authentication", description: "Each portal has its own auth guard and TOTP secret, so a customer session can never reach admin or distributor tooling." },
-      { title: "Webhook reconciliation", description: "The Paystack webhook is the single point that verifies signatures and reconciles order state against the provider." },
-      { title: "Scheduled BNPL charging", description: "Instalments are driven by a cron job, keeping repayment independent of whether the customer is online." },
+      { title: "Full lifecycle ownership", description: "Requirements gathering, database modelling, architecture, production deployment, scheduled processing and post-launch support, delivered end to end for the client." },
+      { title: "Idempotent, race-safe payments", description: "Webhook processing keys off signature verification and idempotency so retries and concurrent events can't double-apply." },
+      { title: "KYC-gated credit", description: "BNPL approval is strictly gated behind identity verification, encoded so the rule can't be bypassed." },
     ],
     challenges: [
-      { title: "Two very different payment rails", description: "Cards and Mobile Money behave nothing alike. I modelled order state so both settle into the same consistent record — webhooks for Paystack, reference-matching plus WhatsApp confirmation for MoMo." },
-      { title: "Extending credit safely", description: "BNPL meant building credit scoring, digital contracts and automated charging, and strictly gating all of it behind KYC — encoded as explicit states so the rule can't be bypassed." },
-      { title: "Four portals, one codebase", description: "Keeping customer, admin, credit-officer and distributor auth cleanly separated took a disciplined shared-includes design and per-role guards." },
-      { title: "Fast on cheap phones", description: "Targeting low-end Android WebViews ruled out heavy frameworks and pushed me toward server rendering, a PWA shell and lightweight progressive enhancement." },
+      { title: "Reconciling two payment rails", description: "Card and Mobile Money behave differently under retry and failure. HMAC-verified, idempotent webhook handling keeps both settling into one consistent order record." },
+      { title: "Securing four account types on one platform", description: "Customers, distributors, admins and credit officers each needed strong, independent authentication — TOTP 2FA, lockout and OTP applied consistently across all four." },
     ],
     security: [
-      "TOTP two-factor authentication on every portal (customer, admin, credit officer, distributor).",
-      "CSRF protection on state-changing requests across the platform.",
-      "KYC verification gates access to credit; identity documents are uploaded and reviewed before approval.",
-      "Paystack webhooks are signature-verified before any order state changes.",
-      "Passwords are hashed; each portal has its own secure password-reset and login-alert flow.",
-      "An append-only audit log records sensitive actions for accountability.",
+      "TOTP two-factor authentication and account lockout across all four authentication domains.",
+      "HMAC-SHA512 webhook signature verification before any payment state changes.",
+      "Idempotent, race-safe transaction reconciliation.",
+      "Private, ownership-checked storage for KYC documents.",
+      "CSRF protection and role-based access control throughout.",
     ],
     results: [
-      "A live e-commerce and FinTech platform (flayona.com) handling real orders, card and Mobile Money payments.",
-      "A working BNPL engine with credit scoring, contracts and automated instalment charging.",
-      "Four secure, role-separated portals running from a single, maintainable PHP codebase.",
-      "The strongest evidence in my portfolio that I can build correctness- and security-critical software end to end.",
+      "A production platform deployed and operating for a commercial client, handling real payments across two rails.",
+      "A working BNPL product with configurable terms, automated instalments and KYC-gated approval.",
+      "Four independently secured account types running from one maintained codebase.",
     ],
     lessons: [
-      "Payment correctness comes from modelling state well — both rails must settle into the same consistent record.",
-      "Constraints are clarifying: targeting low-end devices led to a leaner, faster architecture.",
-      "Separating roles at both the auth and data layers prevents whole categories of access bugs.",
+      "Payment correctness comes from modelling state precisely — idempotency and signature verification aren't optional extras once real money is involved.",
+      "Separating auth domains cleanly at the start avoids cross-role access bugs later.",
     ],
     future: [
-      "Automated dunning and retries for missed BNPL instalments.",
-      "A richer analytics dashboard for revenue, credit performance and defaults.",
-      "Expanded automated test coverage around the payment and BNPL flows.",
+      "This is ongoing client work; further features are scoped directly with the client as the platform grows.",
     ],
     screenshots: [
       {
@@ -227,7 +168,7 @@ export const projects: Project[] = [
       },
       {
         alt: "Flayona admin back office dashboard",
-        caption: "The admin back office: revenue, profit, orders and MoMo reconciliation.",
+        caption: "The admin back office: revenue, profit, orders and payment reconciliation.",
         src: "/screenshots/flayona/admin-dashboard.png",
       },
       {
@@ -237,170 +178,107 @@ export const projects: Project[] = [
       },
     ],
     stack: [
-      { category: "Core", items: ["Vanilla PHP", "MySQL (mysqli)", "Server-rendered", "PWA + Service Worker"] },
-      { category: "Payments", items: ["Paystack (card)", "Mobile Money", "Signed webhooks", "BNPL engine"] },
-      { category: "Credit & identity", items: ["Credit scoring", "Digital contracts", "KYC upload", "Cron charging"] },
-      { category: "Security", items: ["Per-role auth", "TOTP / 2FA", "CSRF", "Audit logging"] },
-      { category: "Comms", items: ["WhatsApp API", "SMS / OTP", "Email / mailer"] },
-      { category: "Platform", items: ["IONOS hosting", "Regional delivery", "Loyalty & reviews"] },
+      { category: "Core", items: ["PHP", "MySQL", "mysqli", "Prepared statements", "PWA"] },
+      { category: "Payments", items: ["Paystack API", "Mobile Money", "HMAC-SHA512 webhooks", "Idempotent processing"] },
+      { category: "Security", items: ["TOTP 2FA", "Account lockout", "Passwordless OTP", "RBAC", "CSRF"] },
+      { category: "Comms", items: ["WhatsApp Cloud API", "SMS", "SMTP"] },
+      { category: "Hosting", items: ["Apache", "IONOS hosting", "HTTPS / SSL/TLS"] },
     ],
   },
 
   /* ================================================================ */
-  /*  OPFIX (Cloud-Based Maintenance Management System)               */
+  /*  OPFIX — Commercial Development Planned                           */
   /* ================================================================ */
   {
     slug: "opfix",
     title: "OpFix",
     tagline:
-      "A cloud-based Maintenance Management System — FastAPI, PostgreSQL and React with a multi-stage job workflow.",
-    category: "Enterprise · Cloud · Full-Stack",
-    year: "2025",
-    role: "Full-Stack Engineer — Final-Year Project",
-    timeline: "Dissertation project",
-    status: "Production",
+      "A secure enterprise maintenance management platform originally developed as my BSc Computer Science Final Year Project and now being prepared for future commercialisation.",
+    category: "Enterprise · Final Year Project",
+    year: "2026",
+    role: "Full-Stack Developer — Final Year Project",
+    timeline: "Final year, BSc Computer Science (2023–2026)",
+    status: "Commercial Development Planned",
     featured: true,
     order: 2,
     accent: "#16a34a",
     summary:
-      "OpFix is a cloud-based Maintenance Management System built as my BSc final-year project — a FastAPI + PostgreSQL backend and a React SPA, with role-based access, a multi-party job workflow state machine, audit logging, SLA tracking and reporting.",
+      "A secure enterprise maintenance management platform originally developed as my BSc Computer Science Final Year Project and now being prepared for future commercialisation — six organisational roles, end-to-end maintenance workflows, and a FastAPI + PostgreSQL backend behind a React SPA.",
     metrics: [
-      { label: "Backend", value: "FastAPI" },
-      { label: "Workflow", value: "State machine" },
-      { label: "Deploy", value: "Render + Supabase" },
+      { label: "Status", value: "Commercial development planned" },
+      { label: "Roles", value: "6 organisational" },
+      { label: "Accessibility", value: "~97–99 Lighthouse*" },
     ],
-    primaryStack: ["FastAPI", "PostgreSQL", "React", "SQLAlchemy", "Render"],
-    links: {
-      live: "https://opfix.co.uk",
-      github: "https://github.com/Kingsley-Marfo/Cloud-Based-MMS",
-    },
+    primaryStack: ["FastAPI", "PostgreSQL", "React", "Vite", "Supabase"],
+    links: { live: "https://opfix.co.uk" },
     overview: [
-      "OpFix is a cloud-based Maintenance Management System: stores raise maintenance jobs, admins triage them, contractors and engineers carry out the work, and an accounts office handles invoicing — all tracked through one auditable workflow.",
-      "I built it as my BSc Computer Science final-year project and dissertation: a FastAPI backend over PostgreSQL with SQLAlchemy and Alembic, a React + Vite + Tailwind single-page app, JWT authentication with TOTP two-factor, a pytest suite, and a deployment on Render backed by Supabase Postgres.",
+      "OpFix is a secure enterprise maintenance management platform originally developed as my BSc Computer Science Final Year Project, now being prepared for future commercialisation. Stores raise maintenance jobs, regional managers and admins triage and approve them, engineers and contractors carry out the work, and accounts handle payment — all tracked through one auditable system.",
+      "Because commercialisation is planned, the source repository is private and this case study focuses on the engineering decisions and verified outcomes rather than implementation internals.",
     ],
     problem: [
-      "Maintenance work in a multi-site business passes through many hands — the store that reports a fault, the admin who approves it, the contractor and engineer who fix it, and the accounts team who get paid. Run that on phone calls and spreadsheets and jobs stall, accountability blurs, and there is no reliable record.",
-      "OpFix needed to make the correct path the only path: a single system where every job moves through defined stages, every role sees exactly what it should, and every significant action is logged.",
+      "Maintenance work across multiple sites and stakeholders — stores, regional managers, contractors, engineers, accounts — is hard to track reliably on phone calls and spreadsheets. Jobs stall, accountability blurs, and there's no dependable record of what happened.",
+      "The brief was to design a single system where every job moves through a defined approval workflow, every one of the six organisational roles sees exactly what it should, and every significant action is auditable.",
     ],
     requirements: [
-      "Role-based access for admins, engineers, clients/stores, contractors and accounts.",
-      "A defined, enforced job workflow from report through completion to payment.",
-      "Comments, file attachments and per-job history.",
-      "Role-specific dashboards, KPIs and exportable reports.",
-      "Secure authentication with JWT, hashed passwords and 2FA.",
-      "A complete, tamper-evident audit trail.",
+      "Role-based access across six organisational roles.",
+      "A defined maintenance workflow with priority-based approval categories.",
+      "Relational modelling for organisations, users, jobs, quotes and approvals.",
+      "Audit logging, soft deletion and restoration.",
+      "Responsive dashboards and reporting per role.",
+      "Strong accessibility across every role-specific view.",
     ],
     research: [
-      "Compared RBAC approaches and chose a role + permission model resolved server-side on every request.",
-      "Designed the job lifecycle as an explicit state machine before writing endpoints, including the contractor and accounts stages.",
-      "Evaluated hosting and settled on Render for compute with Supabase-managed PostgreSQL.",
+      "Modelled the job lifecycle as an explicit workflow before writing any endpoints, including the three priority-based approval categories the business actually needed.",
+      "Iteratively tested and remediated the interface against Lighthouse accessibility scoring across role-specific accounts.",
     ],
     solution: [
-      "A FastAPI backend organises the domain into models, Pydantic schemas, routers and a services layer, with dependencies for the database session, the current user and role requirements.",
-      "Every maintenance job is driven by an explicit status enum — from NEW → ASSIGNED → IN_PROGRESS → ON_HOLD → COMPLETED/CANCELLED, extended with the full contractor-and-accounts flow (approval, sent-to-contractor, engineer-on-site, confirmed-by-store, sent-to-accounts, queried, paid) and post-completion states like reopened, recalled and reassigned.",
-      "Access is governed by roles and permissions checked in FastAPI dependencies, and new users go through an approval step before they can act. Sensitive changes write to an `audit_logs` table.",
-      "A React SPA consumes the API, holding the JWT in context and rendering role-specific dashboards, job boards, comments and exports.",
+      "OpFix models organisations, users, maintenance jobs, quotes, approvals, attachments and audit history as first-class relational entities. Six organisational roles — including regional manager, store manager, engineer, accounts and system admin — are enforced through role-based access control and access-level administration.",
+      "Maintenance requests are categorised by urgency into immediate (three-hour), 48-hour and one-week approval-based workflows, each with its own dashboard and reporting view per role.",
+      "Every significant action — creation, approval, deletion, restoration — writes to an audit log. Soft deletion with restoration means nothing is destroyed by mistake.",
+      "I evaluated the platform across every role-specific account and iteratively remediated accessibility issues, reaching a self-assessed Lighthouse accessibility score of approximately 97–99.",
     ],
     architecture: {
       description: [
-        "The backend is a FastAPI application factory with CORS and modular routers. Business logic lives in a services layer (auth, jobs, users, audit), data access goes through SQLAlchemy models, and requests are shaped by Pydantic schemas. Alembic manages migrations.",
-        "Authentication issues JWTs; a `require_role` dependency resolves the caller's role and permissions on every protected route, and a `get_current_user` dependency loads the account. TOTP provides two-factor auth, and real-time updates are pushed over WebSockets.",
-        "The frontend is a React + Vite + Tailwind SPA that keeps the JWT in an auth context and calls the API through typed axios wrappers. The whole system is deployed on Render with Supabase-managed PostgreSQL.",
+        "A FastAPI backend over PostgreSQL (hosted on Supabase), consumed by a React + Vite single-page application. Role-based access control is enforced server-side on every protected route, resolving each of the six organisational roles to its permitted actions.",
+        "As this project is being prepared for commercialisation, internal implementation details (data models, business rules, authentication internals) are intentionally not published here.",
       ],
       diagram: `flowchart TB
-    UI["React + Vite SPA<br/>(JWT in context)"] -->|axios| API["FastAPI app"]
-    API --> DEPS["Dependencies<br/>get_current_user · require_role"]
-    DEPS --> SVC["Services<br/>(auth · jobs · users · audit)"]
-    SVC --> ORM["SQLAlchemy models"]
-    ORM --> PG[("PostgreSQL (Supabase)")]
-    SVC --> AUDIT["audit_logs"]
-    API --> WS["WebSocket notifications"]
-    API --> EXP["Exports (Excel · PDF)"]
-    ALEMBIC["Alembic migrations"] --> PG`,
-    },
-    database: {
-      description: [
-        "A user has a role and belongs to an organisational structure (company, store, contractor department, region) and can report to another user. Maintenance jobs carry a priority and a status, and accumulate assignments, comments, attachments and activity. Audit events reference the acting user and the affected job.",
-        "Roles and permissions are first-class tables, so access rules are data rather than scattered conditionals — and jobs, users and most entities support soft deletion for a recoverable history.",
-      ],
-      diagram: `erDiagram
-    ROLE ||--o{ USER : grants
-    USER ||--o{ MAINTENANCE_JOB : reports
-    USER ||--o{ JOB_ASSIGNMENT : assigned
-    MAINTENANCE_JOB ||--o{ JOB_ASSIGNMENT : has
-    MAINTENANCE_JOB ||--o{ JOB_COMMENT : has
-    MAINTENANCE_JOB ||--o{ ATTACHMENT : has
-    USER ||--o{ AUDIT_LOG : performs
-    MAINTENANCE_JOB ||--o{ AUDIT_LOG : concerns
-    ROLE {
-      int id PK
-      string name
-    }
-    USER {
-      int id PK
-      int role_id FK
-      int reports_to_user_id FK
-      bool is_approved
-      bool totp_enabled
-    }
-    MAINTENANCE_JOB {
-      int id PK
-      int reported_by FK
-      enum priority
-      enum status
-    }
-    JOB_ASSIGNMENT {
-      int id PK
-      int job_id FK
-      int engineer_id FK
-    }`,
+    UI["React + Vite SPA"] --> API["FastAPI backend"]
+    API --> RBAC["Role-based access control<br/>(six organisational roles)"]
+    RBAC --> DB[("PostgreSQL — Supabase")]
+    API --> WF["Approval workflow<br/>3hr · 48hr · 1-week categories"]
+    WF --> DB
+    API --> AUDIT["Audit log +<br/>soft delete / restore"]`,
     },
     features: [
-      { title: "Role-based access control", description: "Admin, Engineer, Client/store, contractor and accounts roles, enforced server-side via FastAPI dependencies." },
-      { title: "Multi-stage job workflow", description: "An explicit state machine spanning report, approval, contractor, engineer, store confirmation and accounts." },
-      { title: "Priorities & SLAs", description: "Jobs carry LOW/MEDIUM/HIGH/CRITICAL priority with SLA configuration and tracking." },
-      { title: "Comments & attachments", description: "Per-job comments and file uploads (JPEG/PNG/PDF/DOCX, up to 5 MB), with internal engineer notes." },
-      { title: "Dashboards & KPIs", description: "Role-specific dashboards with totals, status breakdowns and per-engineer performance." },
-      { title: "Audit logging", description: "Every significant action is recorded in an append-only audit_logs table." },
-      { title: "JWT auth + 2FA", description: "Token-based auth with bcrypt hashing, TOTP two-factor, and a user-approval step before access." },
-      { title: "Exports & reporting", description: "Excel and PDF exports plus scheduled reports for management." },
-      { title: "Real-time notifications", description: "WebSocket-pushed updates so job changes surface immediately." },
+      { title: "Six organisational roles", description: "Including regional manager, store manager, engineer, accounts and system admin, each with distinct permissions." },
+      { title: "Priority-based approval workflow", description: "Immediate (three-hour), 48-hour and one-week maintenance categories, each with its own approval path." },
+      { title: "Relational job lifecycle", description: "Organisations, users, jobs, quotes, approvals, attachments and audit history modelled as first-class entities." },
+      { title: "Audit logging & soft delete", description: "Every significant action is logged; deletions are soft and restorable." },
+      { title: "Role-specific dashboards & reporting", description: "Responsive dashboards tailored to what each of the six roles needs to see." },
+      { title: "Accessibility-driven development", description: "Iteratively tested and remediated across role accounts to a self-assessed ~97–99 Lighthouse accessibility score." },
     ],
     implementation: [
-      { title: "Explicit state machine", description: "The job status enum encodes every valid stage — including the contractor and accounts flow and recall/reopen — so invalid transitions can't happen." },
-      { title: "Permissions as data", description: "Roles and permissions are database tables resolved in a require_role dependency, not conditionals sprinkled through routes." },
-      { title: "Layered FastAPI structure", description: "Models, Pydantic schemas, routers and a services layer keep business logic testable and separate from transport." },
-      { title: "Migrations & tests", description: "Alembic manages schema evolution and a pytest suite covers the core auth and job logic." },
-      { title: "Managed cloud deploy", description: "Deployed on Render with Supabase-managed PostgreSQL for a low-ops production setup." },
+      { title: "Explicit approval categories", description: "Three named urgency tiers (3-hour / 48-hour / 1-week) rather than a single generic priority field, matching how the business actually triages work." },
+      { title: "Access-level administration", description: "Permissions are administered per role rather than hard-coded per page, keeping access control centralised and auditable." },
+      { title: "Soft delete as a first-class pattern", description: "Deletion and restoration are both explicit, logged operations — nothing disappears silently." },
     ],
     challenges: [
-      { title: "Modelling a multi-party workflow", description: "The real process crosses stores, admins, contractors, engineers and accounts. Encoding it as one explicit status enum — with a query-and-resubmit loop for invoices — turned a tangle of edge cases into defined transitions." },
-      { title: "Getting RBAC right", description: "With several roles and an org hierarchy, I moved permission checks into FastAPI dependencies backed by role/permission tables, so authorisation is consistent and central." },
-      { title: "Auditability without clutter", description: "Writing audit events on the same path as the changes they describe kept the trail complete without scattering logging calls everywhere." },
-    ],
-    security: [
-      "JWT authentication with bcrypt-hashed passwords and TOTP two-factor.",
-      "A user-approval workflow so new accounts can't act until approved.",
-      "Server-side role and permission checks on every protected route.",
-      "Append-only audit logging of significant actions.",
-      "File uploads constrained by type and size (JPEG/PNG/PDF/DOCX, 5 MB).",
-      "Soft deletes to preserve a recoverable, tamper-evident history.",
+      { title: "Modelling six distinct roles cleanly", description: "With six organisational roles spanning stores, regions, contractors and accounts, keeping access control centralised (rather than scattered per-page checks) took deliberate up-front design." },
+      { title: "Reaching consistent accessibility across every role", description: "Each role has its own dashboard; reaching a consistent ~97–99 Lighthouse accessibility score meant testing and remediating every one individually, not just the primary view." },
     ],
     results: [
-      "A complete, deployed Maintenance Management System delivered as a final-year dissertation project.",
-      "A rigorous RBAC model and an explicit multi-party job workflow that eliminates invalid states.",
-      "A production cloud deployment on Render + Supabase, backed by migrations and an automated test suite.",
-      "Open source on GitHub as a demonstrable, end-to-end full-stack build.",
+      "A complete, deployed maintenance management platform delivered as a BSc final-year project.",
+      "Six-role access control and a three-tier approval workflow implemented and evaluated end to end.",
+      "Self-assessed Lighthouse accessibility scores of approximately 97–99 across role-specific accounts.",
+      "Now being prepared for future commercialisation.",
     ],
     lessons: [
-      "An explicit state machine is the single highest-leverage decision in a workflow system.",
-      "Treating permissions as data keeps authorisation consistent as roles multiply.",
-      "A layered backend (models · schemas · services · routers) pays off the moment you start testing.",
+      "Designing the approval workflow around the business's real urgency tiers, rather than a generic status field, made the whole system easier to reason about.",
+      "Accessibility work compounds — testing role-by-role surfaced issues a single-account pass would have missed entirely.",
     ],
     future: [
-      "A configurable workflow builder so admins can adjust stages without code.",
-      "Deeper analytics and SLA-breach alerting on top of the activity history.",
-      "Mobile-optimised engineer views for on-site updates.",
+      "Commercial development is planned; further roadmap details will follow as that work progresses.",
     ],
     screenshots: [
       {
@@ -410,200 +288,189 @@ export const projects: Project[] = [
       },
       {
         alt: "OpFix store manager job detail with recall workflow",
-        caption: "A store-manager job detail — converted from a quote, with purchase order and post-completion recall.",
+        caption: "A store-manager job detail view, with purchase order and post-completion recall.",
         src: "/screenshots/opfix/job-detail.png",
       },
       {
         alt: "OpFix two-factor authentication settings",
-        caption: "TOTP two-factor authentication in the security settings — one layer of the auth model.",
+        caption: "Two-factor authentication in the security settings.",
         src: "/screenshots/opfix/two-factor-auth.png",
       },
       {
         alt: "OpFix accounts finance reports with CSV, Excel and PDF export",
-        caption: "The accounts office finance reports, with CSV / Excel / PDF export.",
+        caption: "The accounts finance reports, with CSV / Excel / PDF export.",
         src: "/screenshots/opfix/finance-reports.png",
       },
     ],
     stack: [
-      { category: "Backend", items: ["FastAPI", "SQLAlchemy", "Alembic", "Pydantic", "python-jose (JWT)"] },
-      { category: "Frontend", items: ["React", "Vite", "Tailwind CSS", "Axios", "Auth context"] },
-      { category: "Data", items: ["PostgreSQL", "Supabase", "Migrations", "Soft deletes"] },
-      { category: "Security", items: ["JWT + bcrypt", "TOTP / 2FA", "RBAC", "Audit logging"] },
-      { category: "Quality", items: ["pytest", "Excel/PDF exports", "WebSocket notifications"] },
-      { category: "Platform", items: ["Render", "CI", "Git / GitHub"] },
+      { category: "Backend", items: ["FastAPI", "PostgreSQL", "Supabase"] },
+      { category: "Frontend", items: ["React", "Vite", "Tailwind CSS"] },
+      { category: "Access & audit", items: ["RBAC (6 roles)", "Audit logging", "Soft delete / restore"] },
+      { category: "Quality", items: ["Accessibility remediation", "Responsive dashboards"] },
     ],
   },
 
   /* ================================================================ */
-  /*  JULLI JETS                                                       */
+  /*  JULLI JETS — Client Project (confidential)                       */
   /* ================================================================ */
   {
     slug: "julli-jets",
     title: "Julli Jets",
     tagline:
-      "A commercial private-charter website on WordPress/Elementor, built with a custom PHP page-generation engine.",
+      "A commercial private-charter website built for a client on WordPress and Elementor, with a custom PHP page-generation layer.",
     category: "Client · WordPress · Web",
-    year: "2024",
+    year: "Client engagement",
     role: "Freelance Web Developer",
-    timeline: "Ongoing",
-    status: "Client project",
+    timeline: "Ongoing client relationship",
+    status: "Client Project",
     featured: true,
     order: 3,
     accent: "#ca8a04",
     summary:
-      "A live, commercial private jet, helicopter and yacht charter website (jullijets.co.uk) — built and maintained on WordPress/Elementor through a custom two-layer PHP system that generates the page layouts programmatically.",
+      "A commercial charter company's customer-facing website — private jets, helicopters and yachts — built and maintained for the client on WordPress and Elementor. Delivered under contract; source and internal implementation remain client-confidential.",
     metrics: [
-      { label: "Client", value: "Live site" },
+      { label: "Engagement", value: "Client contract" },
       { label: "Platform", value: "WordPress" },
-      { label: "Approach", value: "Code-gen builder" },
+      { label: "Delivery", value: "Requirements → deploy" },
     ],
     primaryStack: ["WordPress", "Elementor", "PHP", "JavaScript"],
     links: { live: "https://jullijets.co.uk" },
     overview: [
-      "Julli Jets is a commercial charter company offering private jets, helicopters and yachts. I built and maintain their website (jullijets.co.uk) on WordPress and Elementor — but not by clicking around a page builder.",
-      "Instead I wrote a custom two-layer PHP system that generates the Elementor page layouts programmatically. Every page is composed from reusable section and widget builders, which makes the design consistent, versionable and fast to rebuild.",
+      "Julli Jets is a commercial charter company offering private jets, helicopters and yachts. I worked directly with the client to gather requirements and translate their business needs into a responsive, professional customer-facing website on WordPress and Elementor.",
+      "This is client-confidential work — the case study focuses on the business objective, my engineering contribution and the technologies used, not internal source or proprietary content.",
     ],
     problem: [
-      "A charter brand needs a site that feels premium and loads well, with many pages (jets, helicopter, yacht, empty legs, charter request, contact, FAQs and more) that share a consistent design language.",
-      "Editing that many pages by hand in a visual builder is slow and drifts out of sync. The client also needed real functionality — an empty-legs listing and a charter-request booking flow — not just brochure pages.",
+      "A charter brand needed a site that felt premium, loaded well, and gave customers a clear route to enquire — across a large set of pages (aircraft types, empty legs, charter requests, contact) that needed to share a consistent design language.",
+      "As a client engagement, the work also had to fit real constraints: a defined scope, ongoing content updates, and a non-technical stakeholder who needed to see progress clearly.",
     ],
     requirements: [
       "A premium, responsive design across a large set of pages.",
-      "A consistent, maintainable design system rather than hand-tweaked pages.",
-      "An empty-legs listing and a charter-request booking form.",
-      "Deployment to the client's managed hosting.",
+      "Structured content and clear enquiry functionality.",
+      "A maintainable way to keep the design consistent as pages were added.",
+      "Ongoing support for deployment, content and usability changes.",
     ],
     solution: [
-      "I built a PHP library of design tokens, widget builders (containers, headings, buttons, images) and section builders (hero, feature rows, stats strips, service and destination cards, CTA banners). Page scripts compose these into a layout and write it to Elementor as validated JSON.",
-      "Shared chrome — the fixed header, drawer navigation, footer and global CSS — lives in a must-use plugin, and a custom booking engine provides the empty-legs post type and the charter-request form.",
-      "The result is a site whose look is defined in code: change a design token and every page inherits it, then re-run the generator.",
+      "I gathered requirements directly with the client, then designed, developed and deployed a professional, responsive site with structured content and enquiry functionality on WordPress/Elementor.",
+      "To keep the growing page set consistent, I built a PHP layer of reusable design-token constants and section/widget builders that compose Elementor layouts programmatically rather than hand-editing each page — so a change to the design system propagates everywhere at once.",
+      "I've continued supporting the client with deployment, content updates and usability improvements as requirements evolve.",
     ],
     architecture: {
       description: [
-        "Everything routes through a shared PHP library that exposes design tokens as constants and a set of composable widget and section builders returning the exact element shape Elementor expects. Page scripts stay flat: look up the page, build an array of sections, and save.",
-        "Global chrome and CSS live in a must-use plugin loaded on every request, and a separate custom plugin provides the empty-legs content type and the booking form. The generated pages reference that shared design system.",
-        "Deployment is to IONOS-style managed hosting — scripts are uploaded over SSH and run on the server, which bootstraps WordPress and writes the page data.",
+        "A WordPress/Elementor site whose visual design is defined in a shared PHP library (design tokens, widget builders, section builders) rather than hand-tuned per page. Shared chrome (header, footer, global CSS) and a custom booking flow live outside the generated page content. Deployment is via SFTP/SSH to the client's managed hosting.",
       ],
       diagram: `flowchart LR
     LIB["PHP builder library<br/>(tokens · widgets · sections)"] --> GEN["Page scripts"]
-    GEN -->|validated JSON| WP[("WordPress DB<br/>_elementor_data")]
-    MU["mu-plugin<br/>(header · footer · global CSS)"] --> SITE["Rendered site"]
-    BOOK["Booking engine plugin<br/>(empty legs · charter form)"] --> SITE
+    GEN -->|generates| WP[("WordPress site")]
+    MU["Shared chrome<br/>(header · footer · global CSS)"] --> SITE["Rendered site"]
+    BOOK["Charter enquiry &amp; booking flow"] --> SITE
     WP --> SITE
     V["Visitor"] --> SITE`,
     },
     features: [
-      { title: "Programmatic page builder", description: "Reusable PHP section and widget builders generate Elementor layouts as validated JSON." },
-      { title: "Code-defined design system", description: "Design tokens as constants keep colour, type and spacing consistent across every page." },
-      { title: "Empty-legs listing", description: "A custom post type surfaces discounted empty-leg flights." },
-      { title: "Charter-request booking", description: "A booking form captures charter enquiries directly from the site." },
-      { title: "Premium responsive design", description: "A polished, mobile-friendly layout fitting a luxury charter brand." },
+      { title: "Responsive, premium design", description: "A polished, mobile-friendly layout matching a luxury charter brand." },
+      { title: "Consistent design system", description: "Design tokens and reusable builders keep colour, type and spacing consistent as pages are added." },
+      { title: "Enquiry & booking functionality", description: "Structured content with a clear charter-request enquiry flow." },
+      { title: "Ongoing client support", description: "Continued deployment, content updates and usability improvements." },
     ],
     implementation: [
-      { title: "Builders over hand-editing", description: "Pages are composed from vetted helper functions, so the fragile Elementor JSON structure is generated correctly every time." },
-      { title: "Single source for design", description: "Colours and styles are defined once as tokens and referenced everywhere, preventing drift." },
-      { title: "Separation of chrome and content", description: "Header, footer and global CSS live in a must-use plugin, independent of the generated page content." },
-      { title: "Server-side deployment", description: "Scripts are uploaded and executed on the host, bootstrapping WordPress to write page data and flush caches." },
+      { title: "Direct client requirements work", description: "Translated business needs into a responsive site through direct client collaboration." },
+      { title: "Reusable builders over hand-editing", description: "A shared PHP library of section/widget builders keeps the growing page set visually consistent." },
+      { title: "Managed hosting deployment", description: "Deployed and maintained on the client's managed WordPress hosting." },
     ],
     challenges: [
-      { title: "Taming Elementor's data model", description: "Elementor pages are deeply nested JSON that breaks silently on a missing id or unescaped character. Wrapping saves in a validated helper made generation reliable." },
-      { title: "Keeping design in sync", description: "With many pages, hand-editing caused drift. Moving the design into code-level tokens and builders made the whole site consistent and quick to update." },
-      { title: "Working within managed hosting", description: "No modern deploy pipeline — just SSH and the server's own WordPress. I built the workflow around uploading and running scripts, then flushing Elementor caches." },
+      { title: "Keeping many pages visually consistent", description: "As the page count grew, hand-editing invited drift. Moving the design into reusable, code-level builders kept every page consistent and fast to update." },
+      { title: "Translating a non-technical brief into a build", description: "Regular direct communication with the client turned an informal brief into a concrete, professional site." },
     ],
     results: [
-      "A live, premium charter website the client uses as their primary presence.",
-      "A maintainable, code-defined design system that makes site-wide changes fast.",
-      "Real functionality — empty-legs listings and charter requests — beyond static pages.",
+      "A live, professional charter website the client uses as their primary customer-facing presence.",
+      "A maintainable design system that makes site-wide changes fast rather than page-by-page.",
+      "An ongoing client relationship spanning deployment, content and usability work.",
     ],
     lessons: [
-      "Generating a design system in code beats hand-editing a visual builder at scale.",
-      "A luxury brand lives or dies on consistency — tokens enforce it.",
-      "Even constrained hosting can support a disciplined, repeatable workflow.",
+      "Direct, regular client communication matters as much as the code for a commercial engagement.",
+      "Investing in a small design-system layer pays for itself the moment a site grows past a handful of pages.",
     ],
     future: [
-      "A lightweight editing layer so the client can tweak copy without touching scripts.",
-      "Expanded booking and payment integration for direct charter requests.",
+      "Continued support for the client's evolving content and feature requirements.",
     ],
     screenshots: [
       { alt: "Julli Jets homepage hero", caption: "The charter homepage on desktop." },
       { alt: "Julli Jets empty legs listing", caption: "The empty-legs listing." },
-      { alt: "Julli Jets charter request form", caption: "The charter-request booking flow." },
+      { alt: "Julli Jets charter request form", caption: "The charter-request enquiry flow." },
     ],
     stack: [
-      { category: "Platform", items: ["WordPress", "Elementor", "mu-plugins", "Custom booking plugin"] },
-      { category: "Engineering", items: ["PHP page generator", "Design tokens", "Section builders", "Vanilla JS"] },
-      { category: "Delivery", items: ["IONOS hosting", "SSH deploy", "Responsive design"] },
+      { category: "Platform", items: ["WordPress", "Elementor"] },
+      { category: "Engineering", items: ["PHP page-generation layer", "Design tokens", "JavaScript"] },
+      { category: "Delivery", items: ["Managed hosting", "SFTP/SSH deploy", "Responsive design"] },
     ],
   },
 
   /* ================================================================ */
-  /*  RECIPE MANAGEMENT SYSTEM                                         */
+  /*  RECIPE MANAGEMENT SYSTEM — Public Engineering Showcase           */
   /* ================================================================ */
   {
     slug: "recipe-management-system",
     title: "Recipe Management System",
     tagline:
       "“Jollof” — a Ghanaian recipe web app in PHP & MySQL, with a public site, a secure admin CRUD area and AJAX live-search.",
-    category: "Full-Stack · Academic",
-    year: "2025",
-    role: "Software Engineer",
-    timeline: "University module",
-    status: "Academic",
+    category: "Full-Stack · Public Engineering Showcase",
+    year: "2026",
+    role: "Full-Stack Developer",
+    timeline: "BSc coursework — Web Application Development module",
+    status: "Public Engineering Showcase",
     featured: false,
     order: 4,
     accent: "#ea580c",
     summary:
-      "A full-stack recipe web app (“Jollof”) celebrating traditional Ghanaian dishes — a public browsing site plus a secure admin area with full CRUD, AJAX live-search, image uploads and soft deletes, built in vanilla PHP and MySQL with prepared statements throughout.",
+      "A full-stack recipe web app (“Jollof”) celebrating traditional Ghanaian dishes — public browsing plus a secure admin area with full CRUD, image upload and preview, AJAX live-search, and soft delete with restore. Built applying Nielsen usability heuristics and WCAG accessibility considerations, in vanilla PHP and MySQL.",
     metrics: [
       { label: "Stack", value: "PHP · MySQL" },
       { label: "Search", value: "AJAX live" },
-      { label: "Security", value: "Prepared stmts" },
+      { label: "Usability", value: "Nielsen heuristics" },
     ],
     primaryStack: ["PHP", "MySQL", "JavaScript", "AJAX"],
     links: { live: "https://stu140757.webhosting.arden.ac.uk/COM6011D/index.php" },
     overview: [
       "“Jollof” is a full-stack web app celebrating traditional Ghanaian food — from Jollof rice to Kelewele — built in vanilla PHP and MySQL for Arden University's Web Application Development module.",
-      "It pairs a clean public site (home, recipes, search, about) with a secure administrative area behind a login. The admin can create, read, update and delete recipes with full CRUD, and it's where I focused on doing the fundamentals properly: prepared statements everywhere, validated inputs and uploads, soft deletes, and an AJAX live-search that filters without a page reload.",
+      "It pairs a clean public site (home, recipes, search, about) with a secure administrative area behind a login, offering full CRUD, image upload with preview, live search and soft delete with restore. Nielsen usability heuristics and WCAG accessibility considerations were applied throughout the responsive interface.",
     ],
     problem: [
-      "The brief was to build a database-backed web application with a public interface and a secured admin interface offering full CRUD — and to do it with genuine attention to security and code quality, not just a working demo.",
-      "The content itself needed a clear model: recipes with a category, a description, step-by-step instructions, prep and cook times, a difficulty and an image.",
+      "The brief was to build a database-backed web application with a public interface and a secured admin interface offering full CRUD — with genuine attention to usability and security, not just a working demo.",
+      "The content itself needed a clear model: recipes with a category, description, step-by-step instructions, prep and cook times, difficulty and an image.",
     ],
     requirements: [
       "A public site to browse, view and search recipes.",
       "A secure, authenticated admin area with full CRUD.",
-      "A relational MySQL schema behind it.",
-      "Safe data handling — prepared statements, input validation, safe uploads.",
-      "A responsive, accessible interface.",
+      "Image upload with preview.",
+      "Live search without a full page reload.",
+      "Soft delete with restore.",
+      "Usability and accessibility applied to a responsive interface.",
     ],
     solution: [
-      "The public site presents a featured dish, category browsing and search over a catalogue of Ghanaian recipes. The admin area, gated by a hashed-password login, provides the full create/read/update/delete lifecycle over recipes.",
-      "Every database interaction uses prepared statements to separate SQL from user input, inputs are validated and sanitised, and uploaded images are checked for type and size before being stored. Deletes are soft — recipes move to a Trash and can be restored — and the edit form shows a live preview as you type.",
-      "The standout admin feature is an asynchronous live-search in “Manage Recipes”: JavaScript + AJAX call the PHP backend to filter the table dynamically, with no full page reload.",
+      "The public site presents a featured dish, category browsing and search over a catalogue of Ghanaian recipes. The admin area, gated by a login, provides the full create/read/update/delete lifecycle over recipes, with a live image preview as fields change.",
+      "The standout admin feature is an asynchronous live-search in “Manage Recipes”: JavaScript and AJAX call the PHP backend to filter the table dynamically, with no full page reload. Deletes are soft — recipes move to a Trash and can be restored.",
+      "Nielsen's usability heuristics (visibility of system status, user control and error prevention, among others) and WCAG accessibility considerations were applied to the responsive interface throughout — not retrofitted at the end.",
     ],
     architecture: {
       description: [
         "A server-rendered PHP application over MySQL. Shared includes handle configuration, the admin session/auth guard, and image upload; page scripts render the public pages and the admin CRUD flows. The live-search endpoint returns filtered results to the browser over AJAX.",
-        "Security is applied at the data boundary — prepared statements for every query, validation and sanitisation on input, and type/size checks on uploads — rather than bolted on afterwards.",
       ],
       diagram: `flowchart LR
     V["Visitor"] --> PUB["Public site<br/>(home · recipes · search)"]
     A["Admin"] --> AUTH["Login guard"]
     AUTH --> ADMIN["Admin CRUD<br/>(add · edit · trash)"]
     ADMIN -->|AJAX live-search| SEARCH["search endpoint"]
-    PUB --> DB[("MySQL<br/>prepared statements")]
+    PUB --> DB[("MySQL")]
     ADMIN --> DB
     SEARCH --> DB
-    ADMIN --> UP["Image upload<br/>(type + size checks)"]`,
+    ADMIN --> UP["Image upload + preview"]`,
     },
     database: {
       description: [
-        "A recipe belongs to a category and carries a title, short description, instructions, prep and cook times, a difficulty and an image path. A soft-delete timestamp preserves removed recipes for restore, and admin users authenticate against a hashed password. Ingredients are modelled relationally through a junction table.",
+        "A recipe belongs to a category and carries a title, short description, instructions, prep and cook times, a difficulty and an image path. A soft-delete timestamp preserves removed recipes for restore, and admin users authenticate against a hashed password.",
       ],
       diagram: `erDiagram
     CATEGORY ||--o{ RECIPE : groups
-    RECIPE ||--o{ RECIPE_INGREDIENT : uses
-    INGREDIENT ||--o{ RECIPE_INGREDIENT : in
     ADMIN_USER {
       int id PK
       string username
@@ -621,44 +488,37 @@ export const projects: Project[] = [
       int cook_time
       string difficulty
       datetime deleted_at
-    }
-    RECIPE_INGREDIENT {
-      int recipe_id FK
-      int ingredient_id FK
-      string quantity
     }`,
     },
     features: [
       { title: "Public recipe site", description: "Home, category browsing, search and recipe detail for traditional Ghanaian dishes." },
-      { title: "Secure admin CRUD", description: "A hashed-password login gates full create, read, update and delete over recipes." },
+      { title: "Secure admin CRUD", description: "A login gates full create, read, update and delete over recipes." },
       { title: "AJAX live-search", description: "The admin's Manage Recipes list filters dynamically via JavaScript + AJAX, with no page reload." },
-      { title: "Prepared statements", description: "Every query uses prepared statements, separating SQL logic from user input to prevent injection." },
-      { title: "Safe image uploads", description: "Uploaded images are validated for file type and size before being stored." },
-      { title: "Soft deletes & trash", description: "Removed recipes move to a Trash and can be restored, rather than being destroyed." },
-      { title: "Live preview on edit", description: "The edit form previews the recipe card live as fields change." },
+      { title: "Image upload & preview", description: "Uploaded images are validated and previewed live as the form is edited." },
+      { title: "Soft delete & restore", description: "Removed recipes move to a Trash and can be restored, rather than being destroyed." },
+      { title: "Usability & accessibility by design", description: "Nielsen usability heuristics and WCAG accessibility considerations applied to a responsive interface." },
     ],
     implementation: [
-      { title: "Prepared statements everywhere", description: "All database access is parameterised, keeping SQL logic separate from user input." },
       { title: "AJAX over the PHP backend", description: "The live-search fetches filtered results asynchronously, demonstrating JS + AJAX + PHP working together." },
       { title: "Soft delete over hard delete", description: "Deleting sets a timestamp and moves the recipe to Trash, so it stays recoverable." },
-      { title: "Validated uploads", description: "Image uploads are checked for type and size before being written to the server." },
+      { title: "Usability heuristics applied deliberately", description: "Nielsen's heuristics informed concrete decisions — visible system status on save/delete, clear error prevention on required fields." },
     ],
     challenges: [
       { title: "Building the live-search", description: "Wiring JavaScript, AJAX and the PHP backend so the table filters smoothly without a reload took careful handling of requests and rendering." },
-      { title: "Safe input and uploads", description: "Applying prepared statements, validation/sanitisation and upload checks consistently was the security discipline the module rewarded." },
+      { title: "Applying usability heuristics concretely", description: "Turning Nielsen's heuristics into specific interface decisions, rather than a checklist, shaped the create/edit flow and its feedback states." },
     ],
     results: [
       "A working, deployed recipe web app with a polished public site and a full admin CRUD area.",
-      "Security fundamentals applied properly — prepared statements, validation and safe uploads throughout.",
+      "Usability and accessibility applied deliberately, not retrofitted, per Nielsen heuristics and WCAG considerations.",
       "A demonstrable grasp of JavaScript, AJAX and PHP working together in the live-search.",
     ],
     lessons: [
-      "Prepared statements and input validation are the baseline for any database-backed app — not an afterthought.",
+      "Applying usability heuristics during design — not after — changes which decisions you even consider.",
       "A small async touch like live-search noticeably improves how responsive an admin tool feels.",
     ],
     future: [
+      "Push the source to a public repository as the flagship open code example on this portfolio.",
       "Tagging and richer public search and filtering.",
-      "User accounts so visitors can save favourite recipes.",
     ],
     screenshots: [
       {
@@ -673,15 +533,14 @@ export const projects: Project[] = [
       },
       {
         alt: "Admin edit recipe form with live preview",
-        caption: "The edit form, with a live preview and validated image upload.",
+        caption: "The edit form, with a live preview and image upload.",
         src: "/screenshots/recipe/edit-recipe.png",
       },
     ],
     stack: [
-      { category: "Core", items: ["Vanilla PHP", "MySQL", "Server-rendered"] },
-      { category: "Frontend", items: ["JavaScript", "AJAX live-search", "Responsive UI"] },
-      { category: "Data", items: ["Normalised schema", "Soft deletes", "Image paths"] },
-      { category: "Security", items: ["Prepared statements", "Input validation", "Safe uploads", "Admin auth"] },
+      { category: "Core", items: ["PHP", "MySQL", "Server-rendered"] },
+      { category: "Frontend", items: ["JavaScript", "AJAX", "Responsive UI"] },
+      { category: "Quality", items: ["Nielsen heuristics", "WCAG considerations", "Soft delete"] },
     ],
   },
 ];
