@@ -13,37 +13,38 @@ export type EducationItem = {
 export const education: EducationItem[] = [
   {
     qualification: "BSc (Hons) Computer Science",
-    institution: "Arden University",
-    period: "2023 — 2025",
+    institution: "Arden University, UK",
+    period: "2023 — 2026",
     summary:
-      "A Computer Science degree grounded in software engineering, algorithms, databases, security and systems — applied throughout in real, deployed projects rather than throwaway exercises.",
+      "A Computer Science degree grounded in software engineering, databases, security and systems design — applied throughout in real, deployed projects rather than throwaway exercises.",
     modules: [
       "Software Engineering",
-      "Data Structures & Algorithms",
-      "Database Systems",
-      "Web Development",
+      "Web Application Development",
       "Object-Oriented Programming",
-      "Computer Security",
-      "Cloud Computing",
-      "Systems Analysis & Design",
+      "Database Systems and Advanced Databases",
+      "Cloud and Distributed Computing",
+      "Information Security",
+      "Systems Analysis and Design",
+      "Human Computer Interaction",
     ],
     finalYearProject: {
-      title: "Final Year Project — OpFix: Cloud-Based Maintenance Management System",
+      title: "Final Year Project — Design and Implementation of a Secure Cloud-Based Maintenance Management System",
       description:
-        "Researched, designed and built a cloud-based Maintenance Management System (FastAPI, PostgreSQL/Supabase and React) featuring role-based access control, a multi-stage job workflow state machine, audit logging, SLA tracking and reporting. The dissertation covered requirements analysis, system design, implementation decisions, a pytest testing strategy and a critical evaluation against the original objectives.",
+        "Designed and built OpFix, a secure enterprise-style maintenance management platform with six organisational roles, role-based access control and end-to-end approval workflows. The dissertation covered requirements analysis, system design, implementation, testing and a critical evaluation against the original objectives — later reworked into a public case study now being prepared for future commercialisation.",
     },
   },
 ];
 
-export type Certification = {
-  title: string;
-  issuer: string;
-  status: "planned" | "in-progress" | "completed";
-};
-
-/** Placeholder — real certifications will be added here as they are earned. */
-export const certifications: Certification[] = [
-  { title: "AWS Certified Cloud Practitioner", issuer: "Amazon Web Services", status: "planned" },
-  { title: "Meta Back-End Developer", issuer: "Meta", status: "planned" },
-  { title: "Stripe Certified Developer", issuer: "Stripe", status: "planned" },
+/**
+ * No certifications are currently held. Rather than list placeholder /
+ * "planned" certifications, this reflects verified, ongoing self-directed
+ * learning (per CV: "Professional development (ongoing)").
+ */
+export const currentLearning: string[] = [
+  "Docker",
+  "Automated testing",
+  "CI/CD",
+  "AWS",
+  "Azure",
+  "System design",
 ];

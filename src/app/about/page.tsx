@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { GraduationCap, BadgeCheck, Utensils, Rocket } from "lucide-react";
+import { GraduationCap, Compass, Target, Users2 } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 import { PageHeader } from "@/components/page-header";
 import { Container, Section } from "@/components/ui/container";
@@ -9,30 +9,30 @@ import { Reveal } from "@/components/ui/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Timeline } from "@/components/timeline";
 import { allExperience } from "@/lib/data/experience";
-import { education, certifications } from "@/lib/data/education";
+import { education } from "@/lib/data/education";
 import { ButtonLink } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Software Engineer with a Computer Science degree and a background in restaurant leadership — now building production FinTech and enterprise software.",
+    "Software Engineer and BSc Computer Science graduate who also manages a 30+ person team as a Restaurant Manager — how that leadership experience shapes engineering judgement.",
 };
 
-const journey = [
+const transfer = [
   {
-    icon: Utensils,
-    title: "Leadership in hospitality",
-    body: "Years leading front-of-house teams under pressure taught me ownership, communication and calm problem-solving — the human side of engineering.",
+    icon: Target,
+    title: "Ownership",
+    body: "Running daily operations for a 30+ person team means outcomes are mine regardless of who's on shift. I bring that same standard to code I ship — I own it in production, not just at merge.",
   },
   {
-    icon: GraduationCap,
-    title: "Computer Science degree",
-    body: "A rigorous grounding in software engineering, algorithms, databases and systems — applied throughout in real, deployed projects.",
+    icon: Compass,
+    title: "Decision making under pressure",
+    body: "Quick-service management is constant triage: limited time, incomplete information, real consequences. That's close to debugging a production incident — stay calm, gather signal fast, decide.",
   },
   {
-    icon: Rocket,
-    title: "Building production software",
-    body: "Now designing and shipping FinTech and enterprise systems: payments, BNPL, KYC, authentication and role-based platforms.",
+    icon: Users2,
+    title: "Communication across audiences",
+    body: "Managing stakeholders across Operations, HR, IT and Engineering means translating technical constraints for non-technical people daily. That's the same skill a good engineer uses writing a case study or a PR description.",
   },
 ];
 
@@ -41,8 +41,8 @@ export default function AboutPage() {
     <>
       <PageHeader
         eyebrow="About"
-        title="Engineer first — with a leadership backstory."
-        description="I design and build production software, and I bring the ownership mindset of someone who has led teams in the real world."
+        title="Software Engineer, currently also managing a 30+ person team."
+        description="I work full-time as a Restaurant Manager while delivering client software contracts and completing a BSc in Computer Science. Here's how those two tracks connect."
       />
 
       {/* Bio + portrait */}
@@ -50,44 +50,49 @@ export default function AboutPage() {
         <Container className="grid gap-12 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
           <Reveal className="space-y-5 text-base leading-relaxed text-muted-foreground">
             <p>
-              I&apos;m {siteConfig.name}, a Software Engineer based in the{" "}
+              I&apos;m {siteConfig.name}, a Software Engineer based in{" "}
               {siteConfig.location}. I specialise in full-stack and backend
               development, with a particular focus on systems where correctness
               matters — payments, identity and access.
             </p>
             <p>
-              My route into engineering wasn&apos;t the standard one, and I think
-              that&apos;s a strength. Before software, I spent years in{" "}
+              I didn&apos;t come into engineering the standard way. I&apos;ve spent
+              a decade in restaurant management — starting as a Shift Manager at{" "}
+              <span className="font-medium text-foreground">Burger King UK</span>{" "}
+              in 2016, progressing to Restaurant Manager by 2022, a spell as
+              Department Manager at{" "}
               <span className="font-medium text-foreground">
-                restaurant leadership
+                Moto Hospitality Ltd
               </span>
-              , supervising teams in a fast-paced, high-pressure environment.
-              That&apos;s where I learned to take ownership of outcomes, stay calm
-              when things break, and communicate clearly with people who
-              don&apos;t share my jargon — all of which I use every day as an
-              engineer.
+              , and back to Burger King UK as Restaurant Manager since 2023,
+              where I currently lead a team of more than 30. That&apos;s not a
+              closed chapter before software — it&apos;s a demanding job I still
+              hold today, alongside client development work and finishing my
+              degree.
             </p>
             <p>
               During my{" "}
               <span className="font-medium text-foreground">
-                Computer Science degree
+                BSc Computer Science
               </span>{" "}
-              I didn&apos;t want to just pass modules — I wanted to build real
-              things. That drive led to{" "}
+              at Arden University, I didn&apos;t want to just pass modules — I
+              wanted to build real things. That drive led to client work on{" "}
               <span className="font-medium text-foreground">Flayona</span>, a
-              FinTech commerce platform with payments, Buy-Now-Pay-Later, KYC and
-              audit logging, and to{" "}
-              <span className="font-medium text-foreground">OpFix</span>, an
-              enterprise operations platform built around role-based access and
-              a strict workflow engine.
+              FinTech e-commerce platform with BNPL lending and secure
+              authentication, and to{" "}
+              <span className="font-medium text-foreground">OpFix</span>, my
+              final-year project — an enterprise maintenance management platform
+              now being prepared for future commercialisation.
             </p>
             <p>
               What excites me most is turning a messy business problem into
               software that&apos;s reliable, secure and genuinely usable. I care
-              about the schema as much as the screen, and about the person on the
-              other end of the keyboard as much as the code.
+              about the schema as much as the screen, and the operational
+              discipline of managing a team under pressure carries directly into
+              how I build.
             </p>
             <div className="flex flex-wrap gap-2 pt-2">
+              <Badge variant="primary">Software Engineer</Badge>
               {siteConfig.brand.map((b) => (
                 <Badge key={b} variant="primary">
                   {b}
@@ -98,7 +103,7 @@ export default function AboutPage() {
 
           <Reveal delay={1}>
             <div className="sticky top-24 space-y-4">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border">
+              <div className="relative aspect-4/5 overflow-hidden rounded-2xl border border-border">
                 <Image
                   src={siteConfig.avatar}
                   alt={`${siteConfig.name}, Software Engineer`}
@@ -110,7 +115,7 @@ export default function AboutPage() {
               <div className="rounded-2xl border border-border bg-card p-5">
                 <p className="text-sm font-medium">Currently</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Open to Software Engineer / Full-Stack / Backend roles.
+                  Open to Software Engineer, Full-Stack and Backend roles.
                 </p>
                 <ButtonLink href="/contact" size="sm" className="mt-4 w-full">
                   Get in touch
@@ -121,26 +126,27 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Journey */}
+      {/* What transfers */}
       <Section className="border-y border-border bg-muted/30">
         <Container>
           <SectionHeading
-            eyebrow="The journey"
-            title="From leading teams to shipping systems"
+            eyebrow="What transfers"
+            title="Leadership and engineering aren't separate tracks"
+            description="Specific ways a decade of operational management shapes how I approach software."
           />
           <div className="mt-12 grid gap-4 md:grid-cols-3">
-            {journey.map((j, i) => (
+            {transfer.map((t, i) => (
               <Reveal
-                key={j.title}
+                key={t.title}
                 delay={i}
                 className="rounded-2xl border border-border bg-card p-6"
               >
                 <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <j.icon className="size-5" />
+                  <t.icon className="size-5" />
                 </span>
-                <h3 className="mt-4 font-semibold">{j.title}</h3>
+                <h3 className="mt-4 font-semibold">{t.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {j.body}
+                  {t.body}
                 </p>
               </Reveal>
             ))}
@@ -153,8 +159,8 @@ export default function AboutPage() {
         <Container>
           <SectionHeading
             eyebrow="Experience"
-            title="Where I've applied it"
-            description="Software engineering first, leadership second — both shape how I build."
+            title="Engineering and leadership, side by side"
+            description="Software engineering is listed first; leadership experience is concurrent, not historical."
           />
           <div className="mt-12 max-w-3xl">
             <Timeline items={allExperience} />
@@ -217,35 +223,6 @@ export default function AboutPage() {
                       </span>
                     ))}
                   </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Certifications */}
-      <Section>
-        <Container>
-          <SectionHeading
-            eyebrow="Certifications"
-            title="Continuous learning"
-            description="A placeholder for certifications — these will be filled in as they're earned."
-          />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {certifications.map((c, i) => (
-              <Reveal
-                key={c.title}
-                delay={i % 3}
-                className="flex items-start gap-3 rounded-2xl border border-dashed border-border bg-card p-6"
-              >
-                <span className="flex size-10 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                  <BadgeCheck className="size-5" />
-                </span>
-                <div>
-                  <h3 className="text-sm font-semibold">{c.title}</h3>
-                  <p className="text-xs text-muted-foreground">{c.issuer}</p>
-                  <Badge className="mt-2 capitalize">{c.status}</Badge>
                 </div>
               </Reveal>
             ))}

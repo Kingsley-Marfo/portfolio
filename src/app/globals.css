@@ -142,22 +142,6 @@
     background-size: 56px 56px;
   }
 
-  .text-gradient {
-    background: linear-gradient(
-      100deg,
-      var(--foreground) 0%,
-      color-mix(in oklab, var(--primary) 85%, var(--foreground)) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .glow-primary {
-    box-shadow: 0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--primary) 45%, transparent);
-  }
-
   /* Thin scrollbar for code blocks */
   .scrollbar-thin::-webkit-scrollbar {
     height: 8px;

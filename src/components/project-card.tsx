@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import type { Project } from "@/lib/data/projects";
+import type { Project, ProjectStatus } from "@/lib/data/projects";
 import { Badge } from "@/components/ui/badge";
 import { TechBadge } from "@/components/ui/tech-badge";
 import { cn } from "@/lib/utils";
+
+/** Shorter labels for the compact card — full status shows on the case study page. */
+const shortStatus: Record<ProjectStatus, string> = {
+  "Client Project": "Client Project",
+  "Commercial Development Planned": "Planned SaaS",
+  "Public Engineering Showcase": "Public Showcase",
+};
 
 export function ProjectCard({
   project,
@@ -44,8 +51,11 @@ export function ProjectCard({
             <p className="text-xs text-muted-foreground/70">{project.year}</p>
           </div>
         </div>
-        <Badge variant={project.status === "Academic" ? "default" : "primary"}>
-          {project.status}
+        <Badge
+          variant={project.status === "Public Engineering Showcase" ? "primary" : "default"}
+          className="shrink-0 whitespace-nowrap"
+        >
+          {shortStatus[project.status]}
         </Badge>
       </div>
 

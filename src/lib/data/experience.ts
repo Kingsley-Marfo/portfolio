@@ -12,46 +12,46 @@ export type ExperienceItem = {
 /** Software engineering experience is presented first, leadership second. */
 export const engineeringExperience: ExperienceItem[] = [
   {
-    role: "Founder & Full-Stack Engineer",
+    role: "Freelance Software Developer — Flayona (Client Project)",
     organisation: "Flayona",
     type: "engineering",
-    period: "2024 — Present",
+    period: "2025 — Present",
     summary:
-      "Designed and built a Ghana-focused e-commerce and FinTech platform end to end in vanilla PHP and MySQL — Paystack and Mobile Money payments, a Buy-Now-Pay-Later engine with credit scoring, KYC onboarding and four separate role portals.",
+      "Designed and deployed a production multi-vendor e-commerce and FinTech platform for a commercial client — distributor-specific pricing, variant-level inventory, region-based fulfilment, and a configurable Buy-Now-Pay-Later lending system, in vanilla PHP and MySQL.",
     highlights: [
-      "Built four distinct authenticated portals — customer, admin/staff, credit officer and distributor — each with its own login, 2FA and password-reset flow.",
-      "Engineered a BNPL engine with credit scoring, digital contracts and a cron job that automatically charges instalments.",
-      "Integrated Paystack (card) and Mobile Money, with signature-verified webhooks reconciling orders.",
-      "Hardened the platform with CSRF protection, TOTP two-factor auth, KYC verification and full audit logging.",
+      "Delivered a configurable BNPL lending system with KYC onboarding, 1–24 month repayment terms, tiered flat-interest pricing (0–22%), automated instalment scheduling and capped, non-compounding late fees.",
+      "Integrated Paystack card and Mobile Money payments using HMAC-SHA512 webhook verification, idempotent processing and race-safe transaction reconciliation.",
+      "Engineered four secure authentication domains — customers, distributors, administrators and Credit Officers — with TOTP two-factor authentication, account lockout, passwordless OTP and role-based access control.",
+      "Implemented secure handling of Ghana Cards, payslips, selfies and KYC information using private storage and ownership-checked, authenticated access.",
     ],
-    stack: ["PHP", "MySQL", "Paystack", "TOTP / 2FA", "PWA"],
+    stack: ["PHP", "MySQL", "Paystack API", "WhatsApp Cloud API", "PWA"],
   },
   {
-    role: "Full-Stack Engineer — OpFix (Dissertation Project)",
-    organisation: "Cloud-Based Maintenance Management System",
+    role: "Full-Stack Developer — OpFix (Final Year Project)",
+    organisation: "OpFix",
     type: "engineering",
-    period: "2024 — 2025",
+    period: "2026",
     summary:
-      "Built OpFix, a cloud-based Maintenance Management System, as my BSc final-year project — a FastAPI + PostgreSQL backend and a React SPA, with role-based access, a multi-stage job workflow and full auditability.",
+      "Designed and deployed a secure, enterprise-style cloud-based maintenance management platform as my BSc final-year project — six organisational roles, end-to-end maintenance workflows, and a FastAPI + PostgreSQL backend behind a React SPA. Now being prepared for future commercialisation.",
     highlights: [
-      "Modelled a multi-party workflow (store → admin → contractor → engineer → accounts) as an explicit job state machine.",
-      "Enforced role-based access (Admin, Engineer, Client and more) with JWT auth, bcrypt hashing and TOTP 2FA.",
-      "Added audit logging, file attachments, SLA tracking, KPI dashboards and Excel/PDF exports.",
-      "Backed by SQLAlchemy + Alembic migrations, a pytest suite, and deployed on Render with Supabase Postgres.",
+      "Modelled relational data structures for organisations, users, maintenance jobs, quotes, approvals, attachments and audit history.",
+      "Implemented role-based access control, access-level administration, audit logging, and soft deletion with restoration.",
+      "Built workflows for immediate (three-hour), 48-hour and one-week approval-based maintenance categories, with responsive dashboards and reporting.",
+      "Evaluated the platform across role-specific accounts and improved accessibility to a self-assessed ~97–99 Lighthouse score through iterative testing and remediation.",
     ],
-    stack: ["FastAPI", "PostgreSQL", "React", "SQLAlchemy", "Render"],
+    stack: ["FastAPI", "PostgreSQL", "React", "Vite", "Supabase"],
   },
   {
-    role: "Freelance Web Developer",
-    organisation: "Julli Jets (Client)",
+    role: "Freelance Web Developer — Julli Jets (Client Project)",
+    organisation: "Julli Jets",
     type: "engineering",
-    period: "2024 — 2025",
+    period: "Client engagement",
     summary:
-      "Delivered and maintain a commercial private-charter website (jullijets.co.uk) on WordPress/Elementor, driven by a custom PHP page-generation system I wrote.",
+      "Worked directly with the client to gather requirements and translate business needs into a responsive commercial website for an aviation charter business, on WordPress and Elementor.",
     highlights: [
-      "Built a two-layer PHP page builder that programmatically generates Elementor layouts from reusable section helpers.",
-      "Developed mu-plugin shortcodes, a global design system and a charter-request booking flow.",
-      "Collaborated directly with the client and deployed to IONOS hosting via SSH.",
+      "Designed, developed and deployed a professional customer-facing website with responsive layouts, structured content and enquiry functionality.",
+      "Built a custom PHP page-generation layer that composes Elementor sections from reusable widget and design-token helpers, keeping the site's design system consistent across pages.",
+      "Supported deployment, content updates, usability improvements and ongoing client requirements.",
     ],
     stack: ["WordPress", "Elementor", "PHP", "JavaScript"],
   },
@@ -59,17 +59,42 @@ export const engineeringExperience: ExperienceItem[] = [
 
 export const leadershipExperience: ExperienceItem[] = [
   {
-    role: "Restaurant Supervisor / Team Lead",
-    organisation: "Hospitality",
+    role: "Restaurant Manager",
+    organisation: "Burger King UK",
     type: "leadership",
-    period: "2019 — 2023",
+    period: "2023 — Present",
     summary:
-      "Led front-of-house teams in a fast-paced, high-pressure environment — the experience that sharpened the ownership, communication and problem-solving I now bring to engineering.",
+      "Lead a team of more than 30 employees in a high-volume quick-service restaurant, alongside freelance software development and completing a BSc in Computer Science.",
     highlights: [
-      "Coordinated and motivated teams during peak service, keeping standards high under pressure.",
-      "Owned rotas, training and issue resolution — end-to-end responsibility for outcomes.",
-      "Turned recurring operational pain points into repeatable processes.",
-      "Built the customer-first, calm-under-pressure mindset that shapes how I ship software.",
+      "Manage recruitment, onboarding, training, performance and workforce planning for a 30+ person team.",
+      "Own business-critical operational systems and digital reporting, using data to support continuous improvement.",
+      "Partner with internal IT teams, engineers and technical suppliers to prioritise and resolve operational incidents.",
+      "Maintain Health & Safety and operational compliance while managing stakeholders across Operations, HR, IT and Engineering.",
+    ],
+  },
+  {
+    role: "Department Manager",
+    organisation: "Moto Hospitality Ltd",
+    type: "leadership",
+    period: "2022 — 2023",
+    summary:
+      "Led and trained front-line teams in a busy motorway service environment, managing daily operational performance, digital systems and reporting.",
+    highlights: [
+      "Maintained compliance standards across a high-throughput service environment.",
+      "Supported improvements in customer service, training and operational delivery.",
+    ],
+  },
+  {
+    role: "Shift Manager → Assistant Manager → Restaurant Manager",
+    organisation: "Burger King UK",
+    type: "leadership",
+    period: "2016 — 2022",
+    summary:
+      "Progressed through increasingly senior management roles over six years, from Shift Manager to Restaurant Manager.",
+    highlights: [
+      "Supervised restaurant operations, employee development, customer service, workforce scheduling and compliance.",
+      "Supported recruitment, onboarding, training and performance management.",
+      "Worked with regional management and technical support teams to deliver operational targets and resolve business-critical issues.",
     ],
   },
 ];

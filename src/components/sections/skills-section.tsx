@@ -3,13 +3,13 @@ import {
   Boxes,
   Server,
   Database,
-  Cloud,
-  ShieldCheck,
   Webhook,
+  ShieldCheck,
+  Cloud,
   Wrench,
-  Cpu,
 } from "lucide-react";
 import { skillGroups } from "@/lib/data/skills";
+import { currentLearning } from "@/lib/data/education";
 import { Container, Section } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/ui/reveal";
@@ -17,14 +17,13 @@ import { TechBadge } from "@/components/ui/tech-badge";
 
 const iconFor: Record<string, React.ComponentType<{ className?: string }>> = {
   Languages: Code2,
-  Frameworks: Boxes,
+  Frontend: Boxes,
   Backend: Server,
   Databases: Database,
-  "Cloud & DevOps": Cloud,
+  "APIs & Integrations": Webhook,
   Security: ShieldCheck,
-  "APIs & Payments": Webhook,
-  Tools: Wrench,
-  Engineering: Cpu,
+  "Cloud & Deployment": Cloud,
+  "Tools & Practices": Wrench,
 };
 
 export function SkillsSection() {
@@ -32,14 +31,14 @@ export function SkillsSection() {
     <Section id="skills">
       <Container>
         <SectionHeading
-          eyebrow="Capabilities"
-          title="A full-stack toolkit, backend-leaning"
-          description="The languages, frameworks and practices I use to design, build, secure and ship production software."
+          eyebrow="Technical Expertise"
+          title="Languages, frameworks and practices"
+          description="Every item here is verified against production work or my CV — nothing aspirational is listed as a current skill."
         />
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {skillGroups.map((group, i) => {
-            const Icon = iconFor[group.category] ?? Cpu;
+            const Icon = iconFor[group.category] ?? Code2;
             return (
               <Reveal
                 key={group.category}
@@ -64,6 +63,15 @@ export function SkillsSection() {
             );
           })}
         </div>
+
+        <Reveal className="mt-6 flex flex-wrap items-center gap-2 rounded-2xl border border-dashed border-border p-5">
+          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Currently learning
+          </span>
+          {currentLearning.map((item) => (
+            <TechBadge key={item}>{item}</TechBadge>
+          ))}
+        </Reveal>
       </Container>
     </Section>
   );

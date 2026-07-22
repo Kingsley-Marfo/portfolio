@@ -12,9 +12,9 @@ export function FeaturedProjects() {
       <Container>
         <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading
-            eyebrow="Selected work"
-            title="Production systems, not throwaway demos"
-            description="Each project is a real system with real constraints. Every card links to an in-depth technical case study."
+            eyebrow="Selected Work"
+            title="Client work, a final-year project, and open coursework"
+            description="Each card links to a full case study covering the business problem, my engineering contribution and the technologies used."
           />
           <Reveal>
             <Link
