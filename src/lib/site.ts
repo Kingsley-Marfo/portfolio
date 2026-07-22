@@ -10,8 +10,8 @@ export const siteConfig = {
     "Software Engineer building secure, scalable web applications, FinTech platforms and enterprise software.",
   summary:
     "Full-stack and backend engineer specialising in production systems — payments, BNPL, authentication, KYC and role-based enterprise platforms. I turn real business problems into reliable, well-architected software.",
-  url: "https://kingsleymarfo.opfix.co.uk",
-  domain: "kingsleymarfo.opfix.co.uk",
+  url: "https://portfolio.opfix.co.uk",
+  domain: "portfolio.opfix.co.uk",
   location: "United Kingdom",
   email: "Kingsley.Marfo@opfix.co.uk",
   cvPath: "/kingsley-marfo-cv.pdf",
