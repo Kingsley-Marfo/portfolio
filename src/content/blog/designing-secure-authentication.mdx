@@ -1,0 +1,50 @@
+---
+title: "Designing secure authentication"
+description: "A practical checklist for authentication that holds up — hashing, sessions, RBAC and the OWASP failure modes worth memorising."
+date: "2024-10-07"
+tags: ["Security", "Backend", "Architecture"]
+---
+
+Authentication is the front door to your application. If it's weak, nothing
+behind it matters. Here's the mental model I use when building it.
+
+## Never store what you can hash
+
+Passwords are hashed with a slow, salted algorithm — never encrypted, never
+stored in plain text. Encryption is reversible; that's exactly what you don't
+want for a password.
+
+## Sessions are a security boundary
+
+Whether you use signed cookies or tokens, the session must be:
+
+- **Validated on every request** — not just at login.
+- **Scoped** — a session identifies a user, and the server decides what that
+  user may do.
+- **Revocable** — logging out, or a security event, should end it.
+
+## Authorisation is not authentication
+
+Knowing *who* someone is (authentication) is different from knowing *what they
+can do* (authorisation). In **OpFix** I separated these cleanly: authentication
+establishes identity, then a role resolves to a set of capabilities.
+
+```ts
+const can = (role: Role, action: Action) =>
+  capabilities[role].includes(action);
+```
+
+Every protected action re-checks this **on the server**. The UI hiding a button
+is a convenience, never a security control.
+
+## The OWASP failure modes worth memorising
+
+- **Broken access control** — the most common. Always check ownership.
+- **Injection** — validate and parameterise everything.
+- **Identification & authentication failures** — weak sessions, no rate limiting.
+
+## The lesson
+
+Good authentication is unglamorous and consistent: hash, validate every request,
+authorise on the server, and assume every input is hostile until proven
+otherwise.

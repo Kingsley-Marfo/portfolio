@@ -1,0 +1,38 @@
+---
+title: "Lessons from building SaaS"
+description: "Hard-won lessons from shipping real products end to end — scope, state, and designing for failure from day one."
+date: "2024-09-02"
+tags: ["Engineering", "SaaS", "Architecture"]
+---
+
+Building software for a class and building software people rely on are different
+sports. Here's what shipping real products taught me.
+
+## Design for failure first
+
+Happy paths are easy. The value is in what happens when a webhook retries, a
+request times out mid-write, or a user does something you didn't expect.
+Transactions, idempotency and explicit error states aren't advanced extras —
+they're the baseline.
+
+## State machines over booleans
+
+A row with five boolean flags has 32 possible combinations, most of them
+nonsense. An explicit state field with defined transitions turns "how did this
+record get here?" bugs into impossibilities.
+
+## Put the logic in one place
+
+Scattered business rules rot. Centralising authorisation, workflow and
+validation made every one of my projects easier to change — and far easier to
+test.
+
+## Scope is a feature
+
+The difference between a project that ships and one that doesn't is usually a
+willingness to cut. A tight, well-defined scope is what makes a deadline real.
+
+## The lesson
+
+The interesting part of software isn't making it work once — it's making it keep
+working under conditions you didn't plan for.
