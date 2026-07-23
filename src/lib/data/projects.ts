@@ -3,6 +3,13 @@ export type Feature = { title: string; description: string };
 export type NamedBlock = { title: string; description: string };
 export type Screenshot = { alt: string; caption: string; src?: string };
 
+/** Concrete, scannable proof of contribution — shown prominently on every case study. */
+export type ProofPoints = {
+  role: string; // what I actually was on this project
+  scope: string; // what I built, concretely
+  depth: string; // the engineering depth involved
+};
+
 /**
  * Classification drives what's shown for each project:
  *  - "Client Project"                — commercial work for a client. Never
@@ -27,10 +34,12 @@ export type Project = {
   role: string;
   timeline: string;
   status: ProjectStatus;
+  cardLabel?: string; // shorter status label for the compact card, if different
   featured: boolean;
   order: number;
   accent: string;
   summary: string;
+  proofPoints: ProofPoints;
   metrics: { label: string; value: string }[];
   primaryStack: string[];
   links: { live?: string; github?: string };
@@ -56,13 +65,13 @@ export type Project = {
 
 export const projects: Project[] = [
   /* ================================================================ */
-  /*  FLAYONA — Client Project (confidential)                          */
+  /*  FLAYONA — Client Project (confidential), flagship case study     */
   /* ================================================================ */
   {
     slug: "flayona",
     title: "Flayona",
     tagline:
-      "A multi-vendor e-commerce and FinTech platform for a commercial client — BNPL lending, Paystack + Mobile Money, four secure authentication domains.",
+      "Marketplace backend, payment integration and BNPL lending for a commercial e-commerce client — distributor pricing, Paystack, Mobile Money, KYC.",
     category: "FinTech · E-commerce · Client Project",
     year: "2025",
     role: "Freelance Software Developer (Contract)",
@@ -72,69 +81,137 @@ export const projects: Project[] = [
     order: 1,
     accent: "#e11d48",
     summary:
-      "A production e-commerce marketplace built for a commercial client — distributor-specific pricing, variant-level inventory, region-based fulfilment, and a configurable Buy-Now-Pay-Later lending system with KYC onboarding. Delivered under contract; implementation details and source remain client-confidential.",
+      "Built the marketplace backend, payment integration, inventory model and admin workflows for a commercial e-commerce client. Designed distributor-specific pricing, variant-level stock tracking, Paystack payment flows, Mobile Money and WhatsApp notifications, and KYC-backed BNPL lending — delivered end to end under contract.",
+    proofPoints: {
+      role: "Engaged directly by the client as the backend-focused full-stack developer; I own the platform's architecture, data model and production deployment.",
+      scope: "Built the distributor-pricing engine, the BNPL lending system (KYC → credit decision → instalments), Paystack + Mobile Money payment flows, and four separate authenticated portals (customer, admin, credit officer, distributor).",
+      depth: "Auth (RBAC, TOTP 2FA, account lockout), payment webhooks (Paystack HMAC-SHA512, idempotent reconciliation), relational schema design (30+ tables), audit logging, and a PWA build tuned for low-end Android on patchy connections.",
+    },
     metrics: [
-      { label: "Engagement", value: "Client contract" },
-      { label: "Payments", value: "Paystack + MoMo" },
-      { label: "Lending", value: "BNPL, 1–24mo" },
+      { label: "Portals", value: "4 authenticated roles" },
+      { label: "Payments", value: "Paystack + Mobile Money" },
+      { label: "Lending", value: "BNPL, 1–24 month terms" },
     ],
     primaryStack: ["PHP", "MySQL", "Paystack API", "WhatsApp Cloud API"],
     links: { live: "https://flayona.com" },
     overview: [
-      "Flayona is a multi-vendor e-commerce and FinTech platform I built under contract for a commercial client, supporting distributor-specific pricing, variant-level inventory and region-based fulfilment — sold at fair local prices and paid for via card or Mobile Money.",
-      "This is client-confidential work: the case study below describes my engineering contribution, the technologies used and the problems solved. Source code, internal business logic and proprietary workflows are not shared, in line with the client agreement.",
+      "Flayona is a multi-vendor e-commerce and FinTech platform I built under contract for a commercial client — a retail marketplace offering everyday products, imported goods and wholesale deals, sold at region-specific prices and paid for via card or Mobile Money. Because it handles real money and extends real credit, correctness and security were the design constraint from day one, not an afterthought.",
+      "This is client-confidential work: source code and internal business logic aren't published, but the architecture and database shape below reflect the real system at a level appropriate to share publicly — what follows is my engineering contribution, not a marketing description.",
     ],
     problem: [
-      "The client needed a platform where different distributors could sell the same catalogue at different, region-specific prices, with real payment options — card and Mobile Money — and a way to extend short-term credit to customers without taking on undue risk.",
-      "That meant building payment reconciliation that never double-counts, an identity-verified lending flow, and account security strong enough for four different types of user (customers, distributors, admin staff and credit officers) sharing one platform.",
+      "The client needed a platform where independent distributors could sell the same catalogue at different, region-specific prices, accept payment the way customers actually pay locally (Mobile Money as much as cards), and extend short-term credit without taking on undue default risk.",
+      "That meant solving three hard problems at once: payment reconciliation that never double-counts across two very different payment rails, an identity-verified lending flow that doesn't gate honest customers unnecessarily, and account security robust enough for four different types of user — customers, distributors, admin staff and credit officers — sharing one platform.",
     ],
     requirements: [
       "Distributor-specific pricing and variant-level inventory per region.",
-      "Card payments (Paystack) and Mobile Money, reconciled reliably.",
-      "A configurable Buy-Now-Pay-Later lending product with KYC.",
-      "Four separate, securely authenticated user types.",
+      "Card payments (Paystack) and Mobile Money, reconciled reliably under retry.",
+      "A configurable Buy-Now-Pay-Later lending product with KYC-gated approval.",
+      "Four separate, securely authenticated user types with no privilege overlap.",
       "Secure handling of identity documents submitted for KYC.",
+      "Fast, installable performance on low-end Android over patchy connections.",
+    ],
+    research: [
+      "Studied Paystack's payment and webhook lifecycle to design reconciliation that survives retries and out-of-order delivery.",
+      "Mapped the Mobile Money flow used locally, where the order/PO number becomes the payment reference and is confirmed over WhatsApp.",
+      "Applied the OWASP Top 10 directly to authentication, CSRF and access control across all four portals rather than as a generic checklist.",
     ],
     solution: [
-      "I designed and deployed the platform in vanilla PHP and MySQL, delivering the full lifecycle from requirements gathering and database modelling through architecture, production deployment, scheduled processing and post-launch support.",
-      "The BNPL product is configurable end to end: 1–24 month repayment terms, tiered flat-interest pricing from 0–22%, automated instalment scheduling and capped, non-compounding late fees — gated behind KYC verification.",
-      "Paystack card payments and Mobile Money are both integrated, with HMAC-SHA512 webhook signature verification, idempotent processing and race-safe transaction reconciliation so a retried or duplicate event can never double-apply.",
-      "Four secure authentication domains — customers, distributors, administrators and Credit Officers — each carry TOTP two-factor authentication, account lockout, passwordless OTP and role-based access control.",
+      "I designed and deployed the platform in vanilla PHP and MySQL, delivering the full lifecycle from requirements gathering and database modelling through architecture, production deployment, scheduled processing and post-launch support — a deliberate tradeoff: no framework, no build step, chosen so the client's own team could host and maintain it cheaply on standard shared hosting, at the cost of writing more plumbing by hand.",
+      "Pricing is distributor-driven: a master catalogue holds a reference price and the admin's private cost, while the price a customer actually pays is set by the distributor serving their region — so the same SKU can be priced differently across the country without duplicating the catalogue.",
+      "The BNPL engine runs an internal credit score, generates a digital contract and an instalment schedule (1–24 months, 0–22% flat interest, capped non-compounding late fees), and a scheduled cron job charges instalments automatically as they fall due — all gated behind KYC verification.",
+      "Paystack card payments and Mobile Money are both integrated. Standard orders settle out-of-band via Mobile Money and WhatsApp confirmation; pre-order deposits go through a Paystack webhook verified with HMAC-SHA512 and processed idempotently, so a retried or duplicate event can never double-apply.",
+      "Four secure authentication domains — customers, distributors, administrators and Credit Officers — each carry TOTP two-factor authentication, account lockout, passwordless OTP and role-based access control, so a compromised customer session can never reach admin or distributor tooling.",
     ],
     architecture: {
       description: [
-        "Flayona is a server-rendered PHP application over MySQL, installed as a PWA. Cross-cutting concerns — authentication guards per role, CSRF, payments, KYC upload, credit logic and audit logging — live in a shared library so every page composes the same vetted building blocks.",
-        "Specific internal architecture, schema and business-logic details are withheld here as client-confidential; the diagram below shows the shape of the system at the level appropriate for a public case study.",
+        "Flayona is a server-rendered PHP application over MySQL (mysqli), installed as a PWA. Cross-cutting concerns — authentication guards per role, CSRF, payments, KYC upload, credit logic and audit logging — live in a shared library so every page composes the same vetted building blocks rather than reimplementing security per route.",
+        "Four separate portals sit behind their own auth guards: the customer storefront, the admin back office, the credit-officer portal that reviews BNPL applications, and the distributor portal with its own point-of-sale, stock and orders.",
+        "Payment is asynchronous by design: standard orders resolve out-of-band via Mobile Money and WhatsApp confirmation, pre-order deposits go through a signature-verified Paystack webhook, and a cron job drives automated BNPL instalment charging independently of any user session — so a customer closing their browser mid-checkout can never leave the order in an ambiguous state.",
       ],
       diagram: `flowchart TB
     C["Customer (PWA)"] --> APP["Server-rendered PHP<br/>+ shared auth/security layer"]
     ADM["Admin"] --> APP
     CO["Credit Officer"] --> APP
-    DIST["Distributor"] --> APP
-    APP --> AUTH["Per-role auth<br/>+ CSRF + TOTP 2FA"]
+    DIST["Distributor (POS)"] --> APP
+    APP --> AUTH["Per-role auth guards<br/>+ CSRF + TOTP 2FA"]
     AUTH --> DB[("MySQL")]
-    APP --> PAY["Paystack API"]
+    APP --> AUDIT["Audit log"]
+    APP --> MOMO["Mobile Money<br/>(PO ref · WhatsApp confirm)"]
+    APP --> PAY["Paystack<br/>(pre-order deposits)"]
     PAY --> WH["HMAC-SHA512 verified webhook<br/>idempotent reconciliation"]
     WH --> DB
-    APP --> MOMO["Mobile Money"]
-    APP --> KYC["KYC: Ghana Card, payslip, selfie<br/>private, ownership-checked storage"]`,
+    DIST --> PRICE["Region pricing + stock"]
+    PRICE --> DB
+    CRON["Cron: BNPL charging"] --> BNPL["BNPL + credit score"]
+    BNPL --> DB`,
+    },
+    database: {
+      description: [
+        "The schema (30+ tables in production) is organised around commerce and credit. A master products table carries a reference price and the admin's private cost, while a distributor_products table sets the region-specific price and distributor_variant_stock tracks stock per distributor — the mechanism that makes distributor-specific pricing possible without duplicating the catalogue.",
+        "Orders link to order_payments (card or Mobile Money), and BNPL orders additionally link to a KYC application, a credit score and a schedule of instalments. Roles are separated at the data layer too — admins, credit officers and distributors are distinct account types with their own credentials and TOTP secrets.",
+      ],
+      diagram: `erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    CUSTOMER ||--o| BNPL_KYC_APPLICATION : submits
+    CUSTOMER ||--o| CUSTOMER_CREDIT_SCORE : scored_by
+    ORDER ||--o{ ORDER_ITEM : contains
+    ORDER ||--o{ ORDER_PAYMENT : settled_by
+    ORDER ||--o| BNPL_ORDER : may_be
+    BNPL_ORDER ||--o{ BNPL_INSTALLMENT : schedules
+    PRODUCT ||--o{ ORDER_ITEM : listed_in
+    DISTRIBUTOR ||--o{ DISTRIBUTOR_PRODUCT : prices
+    PRODUCT ||--o{ DISTRIBUTOR_PRODUCT : priced_as
+    REGION ||--o{ DISTRIBUTOR : served_by
+    CUSTOMER {
+      int id PK
+      string phone
+      int region_id FK
+    }
+    ORDER {
+      int id PK
+      int customer_id FK
+      string po_ref
+      enum order_kind
+      enum fulfilment_type
+    }
+    ORDER_PAYMENT {
+      int id PK
+      int order_id FK
+      enum method
+      enum status
+    }
+    DISTRIBUTOR_PRODUCT {
+      int distributor_id FK
+      int product_id FK
+      decimal price
+    }
+    BNPL_INSTALLMENT {
+      int id PK
+      int bnpl_order_id FK
+      date due_date
+      enum status
+    }`,
     },
     features: [
-      { title: "Distributor-specific pricing", description: "Region-based fulfilment with per-distributor pricing and variant-level inventory." },
-      { title: "Configurable BNPL lending", description: "1–24 month terms, tiered flat-interest pricing (0–22%), automated instalments, capped non-compounding late fees." },
-      { title: "Paystack + Mobile Money", description: "Card and Mobile Money payments, reconciled via HMAC-SHA512 verified, idempotent webhooks." },
+      { title: "Distributor-specific pricing", description: "Region-based fulfilment with per-distributor pricing and variant-level inventory, so the same catalogue is priced differently by region without duplication." },
+      { title: "Configurable BNPL lending", description: "1–24 month terms, tiered flat-interest pricing (0–22%), automated instalments, capped non-compounding late fees, gated behind KYC." },
+      { title: "Paystack + Mobile Money", description: "Card and Mobile Money payments; card flows reconciled via HMAC-SHA512-verified, idempotent webhooks." },
       { title: "Four secure authentication domains", description: "Customers, distributors, admins and Credit Officers — each with TOTP 2FA, account lockout and passwordless OTP." },
-      { title: "KYC document handling", description: "Ghana Cards, payslips and selfies stored privately behind ownership-checked, authenticated access." },
+      { title: "KYC document handling", description: "Identity documents stored privately behind ownership-checked, authenticated access." },
+      { title: "Distributor POS & stock", description: "Distributors run point-of-sale, manage stock and fulfil orders from their own portal." },
       { title: "Loyalty, promotions & internal credit scoring", description: "Configurable loyalty, membership, pre-order, professional-discount and internal credit-scoring capabilities." },
+      { title: "Audit logging across every portal", description: "An append-only audit trail records sensitive actions across all four authentication domains." },
     ],
     implementation: [
+      { title: "Framework-free by deliberate tradeoff", description: "Vanilla PHP and MySQL with no framework or build step — a conscious choice prioritising the client's ability to host and maintain the platform cheaply over developer convenience." },
       { title: "Full lifecycle ownership", description: "Requirements gathering, database modelling, architecture, production deployment, scheduled processing and post-launch support, delivered end to end for the client." },
       { title: "Idempotent, race-safe payments", description: "Webhook processing keys off signature verification and idempotency so retries and concurrent events can't double-apply." },
-      { title: "KYC-gated credit", description: "BNPL approval is strictly gated behind identity verification, encoded so the rule can't be bypassed." },
+      { title: "KYC-gated credit", description: "BNPL approval is strictly gated behind identity verification, encoded so the rule can't be bypassed by any code path." },
     ],
     challenges: [
-      { title: "Reconciling two payment rails", description: "Card and Mobile Money behave differently under retry and failure. HMAC-verified, idempotent webhook handling keeps both settling into one consistent order record." },
-      { title: "Securing four account types on one platform", description: "Customers, distributors, admins and credit officers each needed strong, independent authentication — TOTP 2FA, lockout and OTP applied consistently across all four." },
+      { title: "Reconciling two payment rails", description: "Card and Mobile Money behave differently under retry and failure. HMAC-verified, idempotent webhook handling for Paystack, and PO-reference matching plus WhatsApp confirmation for Mobile Money, keep both settling into one consistent order record." },
+      { title: "Securing four account types on one platform", description: "Customers, distributors, admins and credit officers each needed strong, independent authentication — TOTP 2FA, lockout and OTP applied consistently across all four, so a bug in one portal's auth can't leak into another's." },
+      { title: "Hosting constraints vs. engineering ambition", description: "The client's budget ruled out managed cloud infrastructure. Choosing vanilla PHP over a framework, and MySQL over a managed Postgres service, was a direct tradeoff to fit that constraint without compromising on security fundamentals." },
     ],
     security: [
       "TOTP two-factor authentication and account lockout across all four authentication domains.",
@@ -145,12 +222,13 @@ export const projects: Project[] = [
     ],
     results: [
       "A production platform deployed and operating for a commercial client, handling real payments across two rails.",
-      "A working BNPL product with configurable terms, automated instalments and KYC-gated approval.",
-      "Four independently secured account types running from one maintained codebase.",
+      "A working BNPL product with configurable terms, automated instalments and KYC-gated approval, running unattended via scheduled processing.",
+      "Four independently secured account types running from one maintained codebase with no privilege leakage between roles.",
     ],
     lessons: [
       "Payment correctness comes from modelling state precisely — idempotency and signature verification aren't optional extras once real money is involved.",
-      "Separating auth domains cleanly at the start avoids cross-role access bugs later.",
+      "Separating auth domains cleanly at the start avoids cross-role access bugs later; retrofitting that separation is much harder.",
+      "A client's hosting budget is a real design constraint, not a footnote — it shapes stack choices as much as functional requirements do.",
     ],
     future: [
       "This is ongoing client work; further features are scoped directly with the client as the platform grows.",
@@ -193,17 +271,23 @@ export const projects: Project[] = [
     slug: "opfix",
     title: "OpFix",
     tagline:
-      "A secure enterprise maintenance management platform originally developed as my BSc Computer Science Final Year Project and now being prepared for future commercialisation.",
+      "A secure enterprise maintenance management platform — originally my BSc Final Year Project, now being prepared for future commercialisation.",
     category: "Enterprise · Final Year Project",
     year: "2026",
     role: "Full-Stack Developer — Final Year Project",
     timeline: "Final year, BSc Computer Science (2023–2026)",
     status: "Commercial Development Planned",
+    cardLabel: "Final Year Project",
     featured: true,
     order: 2,
     accent: "#16a34a",
     summary:
-      "A secure enterprise maintenance management platform originally developed as my BSc Computer Science Final Year Project and now being prepared for future commercialisation — six organisational roles, end-to-end maintenance workflows, and a FastAPI + PostgreSQL backend behind a React SPA.",
+      "Built solo, end to end, as my BSc Computer Science final-year project: a secure enterprise maintenance management platform with six organisational roles, a three-tier approval workflow, and a FastAPI + PostgreSQL backend behind a React SPA. Now being prepared for future commercialisation.",
+    proofPoints: {
+      role: "Sole developer — designed, built, tested and deployed the entire platform independently as my final-year project.",
+      scope: "Built six-role access control, a three-tier priority approval workflow (immediate/48-hour/one-week), relational modelling for organisations/jobs/quotes/approvals, and role-specific dashboards and reporting.",
+      depth: "FastAPI + PostgreSQL backend with role-based access control, audit logging with soft-delete/restore, and an accessibility remediation pass reaching a self-assessed ~97–99 Lighthouse score across every role.",
+    },
     metrics: [
       { label: "Status", value: "Commercial development planned" },
       { label: "Roles", value: "6 organisational" },
@@ -212,12 +296,12 @@ export const projects: Project[] = [
     primaryStack: ["FastAPI", "PostgreSQL", "React", "Vite", "Supabase"],
     links: { live: "https://opfix.co.uk" },
     overview: [
-      "OpFix is a secure enterprise maintenance management platform originally developed as my BSc Computer Science Final Year Project, now being prepared for future commercialisation. Stores raise maintenance jobs, regional managers and admins triage and approve them, engineers and contractors carry out the work, and accounts handle payment — all tracked through one auditable system.",
-      "Because commercialisation is planned, the source repository is private and this case study focuses on the engineering decisions and verified outcomes rather than implementation internals.",
+      "OpFix started as my BSc Computer Science Final Year Project: a secure enterprise maintenance management platform where stores raise maintenance jobs, regional managers and admins triage and approve them, engineers and contractors carry out the work, and accounts handle payment — all tracked through one auditable system. It's now being prepared for future commercialisation.",
+      "Because commercialisation is planned, the source repository is private. This case study describes the engineering decisions and verified outcomes at the level appropriate for a public write-up, rather than internal implementation details.",
     ],
     problem: [
       "Maintenance work across multiple sites and stakeholders — stores, regional managers, contractors, engineers, accounts — is hard to track reliably on phone calls and spreadsheets. Jobs stall, accountability blurs, and there's no dependable record of what happened.",
-      "The brief was to design a single system where every job moves through a defined approval workflow, every one of the six organisational roles sees exactly what it should, and every significant action is auditable.",
+      "The brief I set myself was to design a single system where every job moves through a defined approval workflow, every one of six organisational roles sees exactly what it should, and every significant action is auditable — built solo, to production standard, within a final-year project timeline.",
     ],
     requirements: [
       "Role-based access across six organisational roles.",
@@ -228,19 +312,19 @@ export const projects: Project[] = [
       "Strong accessibility across every role-specific view.",
     ],
     research: [
-      "Modelled the job lifecycle as an explicit workflow before writing any endpoints, including the three priority-based approval categories the business actually needed.",
+      "Modelled the job lifecycle as an explicit workflow before writing any endpoints, including the three priority-based approval categories the workflow actually needed.",
       "Iteratively tested and remediated the interface against Lighthouse accessibility scoring across role-specific accounts.",
     ],
     solution: [
       "OpFix models organisations, users, maintenance jobs, quotes, approvals, attachments and audit history as first-class relational entities. Six organisational roles — including regional manager, store manager, engineer, accounts and system admin — are enforced through role-based access control and access-level administration.",
-      "Maintenance requests are categorised by urgency into immediate (three-hour), 48-hour and one-week approval-based workflows, each with its own dashboard and reporting view per role.",
-      "Every significant action — creation, approval, deletion, restoration — writes to an audit log. Soft deletion with restoration means nothing is destroyed by mistake.",
+      "Maintenance requests are categorised by urgency into immediate (three-hour), 48-hour and one-week approval-based workflows, each with its own dashboard and reporting view per role — a tradeoff choosing explicit named tiers over a generic priority field, so the workflow logic matches how urgency is actually communicated in a maintenance operation.",
+      "Every significant action — creation, approval, deletion, restoration — writes to an audit log. Soft deletion with restoration means nothing is destroyed by mistake, even by an admin.",
       "I evaluated the platform across every role-specific account and iteratively remediated accessibility issues, reaching a self-assessed Lighthouse accessibility score of approximately 97–99.",
     ],
     architecture: {
       description: [
         "A FastAPI backend over PostgreSQL (hosted on Supabase), consumed by a React + Vite single-page application. Role-based access control is enforced server-side on every protected route, resolving each of the six organisational roles to its permitted actions.",
-        "As this project is being prepared for commercialisation, internal implementation details (data models, business rules, authentication internals) are intentionally not published here.",
+        "As this project is being prepared for commercialisation, internal implementation details (data models, business rules, authentication internals) are intentionally not published here — the diagram below reflects the shape of the system, not the proprietary implementation.",
       ],
       diagram: `flowchart TB
     UI["React + Vite SPA"] --> API["FastAPI backend"]
@@ -259,13 +343,15 @@ export const projects: Project[] = [
       { title: "Accessibility-driven development", description: "Iteratively tested and remediated across role accounts to a self-assessed ~97–99 Lighthouse accessibility score." },
     ],
     implementation: [
-      { title: "Explicit approval categories", description: "Three named urgency tiers (3-hour / 48-hour / 1-week) rather than a single generic priority field, matching how the business actually triages work." },
+      { title: "Explicit approval categories", description: "Three named urgency tiers (3-hour / 48-hour / 1-week) rather than a single generic priority field, matching how urgency is actually triaged." },
       { title: "Access-level administration", description: "Permissions are administered per role rather than hard-coded per page, keeping access control centralised and auditable." },
       { title: "Soft delete as a first-class pattern", description: "Deletion and restoration are both explicit, logged operations — nothing disappears silently." },
+      { title: "Solo scope management", description: "Built independently within a fixed final-year timeline — a deliberate tradeoff scoping six roles and a full workflow deeply, rather than more roles shallowly." },
     ],
     challenges: [
       { title: "Modelling six distinct roles cleanly", description: "With six organisational roles spanning stores, regions, contractors and accounts, keeping access control centralised (rather than scattered per-page checks) took deliberate up-front design." },
       { title: "Reaching consistent accessibility across every role", description: "Each role has its own dashboard; reaching a consistent ~97–99 Lighthouse accessibility score meant testing and remediating every one individually, not just the primary view." },
+      { title: "Building solo to a production standard", description: "With no team to split the workload, prioritisation was constant — I chose to go deep on access control, workflow correctness and accessibility rather than spread effort thinly across more surface area." },
     ],
     results: [
       "A complete, deployed maintenance management platform delivered as a BSc final-year project.",
@@ -274,8 +360,9 @@ export const projects: Project[] = [
       "Now being prepared for future commercialisation.",
     ],
     lessons: [
-      "Designing the approval workflow around the business's real urgency tiers, rather than a generic status field, made the whole system easier to reason about.",
+      "Designing the approval workflow around real urgency tiers, rather than a generic status field, made the whole system easier to reason about.",
       "Accessibility work compounds — testing role-by-role surfaced issues a single-account pass would have missed entirely.",
+      "Scoping deeply on fewer things beats spreading thin when building solo under a deadline.",
     ],
     future: [
       "Commercial development is planned; further roadmap details will follow as that work progresses.",
@@ -317,7 +404,7 @@ export const projects: Project[] = [
     slug: "julli-jets",
     title: "Julli Jets",
     tagline:
-      "A commercial private-charter website built for a client on WordPress and Elementor, with a custom PHP page-generation layer.",
+      "A commercial private-charter website built for a client on WordPress and Elementor, with a custom PHP page-generation layer I wrote.",
     category: "Client · WordPress · Web",
     year: "Client engagement",
     role: "Freelance Web Developer",
@@ -327,7 +414,12 @@ export const projects: Project[] = [
     order: 3,
     accent: "#ca8a04",
     summary:
-      "A commercial charter company's customer-facing website — private jets, helicopters and yachts — built and maintained for the client on WordPress and Elementor. Delivered under contract; source and internal implementation remain client-confidential.",
+      "Built and maintain a commercial charter company's customer-facing website — private jets, helicopters and yachts — for the client on WordPress and Elementor, via a custom PHP layer that generates page layouts programmatically instead of hand-editing each one.",
+    proofPoints: {
+      role: "Freelance developer engaged directly by the client for design, build and ongoing support — sole developer on the engagement.",
+      scope: "Delivered the full site (homepage, aircraft/yacht pages, empty legs, charter enquiry flow) and built the tooling that generates it.",
+      depth: "A custom PHP library of design-token constants and section/widget builders that compose Elementor layouts programmatically, keeping a growing page set visually consistent without manual per-page editing.",
+    },
     metrics: [
       { label: "Engagement", value: "Client contract" },
       { label: "Platform", value: "WordPress" },
@@ -337,7 +429,7 @@ export const projects: Project[] = [
     links: { live: "https://jullijets.co.uk" },
     overview: [
       "Julli Jets is a commercial charter company offering private jets, helicopters and yachts. I worked directly with the client to gather requirements and translate their business needs into a responsive, professional customer-facing website on WordPress and Elementor.",
-      "This is client-confidential work — the case study focuses on the business objective, my engineering contribution and the technologies used, not internal source or proprietary content.",
+      "This is client-confidential work — the case study focuses on the business objective, my engineering contribution and the technologies used, rather than internal source or proprietary content.",
     ],
     problem: [
       "A charter brand needed a site that felt premium, loaded well, and gave customers a clear route to enquire — across a large set of pages (aircraft types, empty legs, charter requests, contact) that needed to share a consistent design language.",
@@ -351,7 +443,7 @@ export const projects: Project[] = [
     ],
     solution: [
       "I gathered requirements directly with the client, then designed, developed and deployed a professional, responsive site with structured content and enquiry functionality on WordPress/Elementor.",
-      "To keep the growing page set consistent, I built a PHP layer of reusable design-token constants and section/widget builders that compose Elementor layouts programmatically rather than hand-editing each page — so a change to the design system propagates everywhere at once.",
+      "To keep the growing page set consistent — and given the client's ongoing content-update needs rather than a one-off build — I made a deliberate tradeoff: invest upfront in a PHP layer of reusable design-token constants and section/widget builders that compose Elementor layouts programmatically, rather than hand-editing each page. That upfront cost pays back every time the design changes or a page is added.",
       "I've continued supporting the client with deployment, content updates and usability improvements as requirements evolve.",
     ],
     architecture: {
@@ -374,7 +466,7 @@ export const projects: Project[] = [
     ],
     implementation: [
       { title: "Direct client requirements work", description: "Translated business needs into a responsive site through direct client collaboration." },
-      { title: "Reusable builders over hand-editing", description: "A shared PHP library of section/widget builders keeps the growing page set visually consistent." },
+      { title: "Reusable builders over hand-editing", description: "A shared PHP library of section/widget builders keeps the growing page set visually consistent — an upfront investment traded against faster one-off page edits." },
       { title: "Managed hosting deployment", description: "Deployed and maintained on the client's managed WordPress hosting." },
     ],
     challenges: [
@@ -423,6 +515,11 @@ export const projects: Project[] = [
     accent: "#ea580c",
     summary:
       "A full-stack recipe web app (“Jollof”) celebrating traditional Ghanaian dishes — public browsing plus a secure admin area with full CRUD, image upload and preview, AJAX live-search, and soft delete with restore. Built applying Nielsen usability heuristics and WCAG accessibility considerations, in vanilla PHP and MySQL.",
+    proofPoints: {
+      role: "Sole developer — independent coursework, built end to end without a team.",
+      scope: "Built the public site, the secure admin CRUD area, AJAX live-search, image upload with preview, and soft delete with restore.",
+      depth: "Prepared-statement MySQL access throughout, Nielsen usability heuristics and WCAG accessibility considerations applied to a responsive interface, and vanilla JavaScript + AJAX integrated with the PHP backend for live search.",
+    },
     metrics: [
       { label: "Stack", value: "PHP · MySQL" },
       { label: "Search", value: "AJAX live" },
