@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 /** Shorter labels for the compact card — full status shows on the case study page. */
 const shortStatus: Record<ProjectStatus, string> = {
   "Client Project": "Client Project",
-  "Commercial Development Planned": "Planned SaaS",
+  "Commercial Development Planned": "Pre-Commercial",
   "Public Engineering Showcase": "Public Showcase",
 };
 
@@ -55,7 +55,7 @@ export function ProjectCard({
           variant={project.status === "Public Engineering Showcase" ? "primary" : "default"}
           className="shrink-0 whitespace-nowrap"
         >
-          {shortStatus[project.status]}
+          {project.cardLabel ?? shortStatus[project.status]}
         </Badge>
       </div>
 

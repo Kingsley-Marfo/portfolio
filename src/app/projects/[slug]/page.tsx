@@ -265,9 +265,28 @@ export default async function CaseStudyPage({
         </Container>
       </section>
 
-      {/* Recruiter-first summary: Overview, Problem, Achievements, Challenges, Stack */}
+      {/* Recruiter-first summary: Proof points, Overview, Problem, Achievements, Challenges, Stack */}
       <Container className="max-w-3xl py-16">
         <div className="space-y-16">
+          <Reveal>
+            <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
+              {[
+                { label: "Role", value: project.proofPoints.role },
+                { label: "Scope", value: project.proofPoints.scope },
+                { label: "Engineering depth", value: project.proofPoints.depth },
+              ].map((p) => (
+                <div key={p.label} className="bg-card p-6">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                    {p.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {p.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
           <CaseSection id="overview" title="Overview">
             <Paragraphs items={project.overview} />
           </CaseSection>
