@@ -334,6 +334,37 @@ export const projects: Project[] = [
     WF --> DB
     API --> AUDIT["Audit log +<br/>soft delete / restore"]`,
     },
+    database: {
+      description: [
+        "Because commercialisation is planned, the schema below is deliberately high-level — it shows the entity relationships already described above (organisations, users, roles, jobs, approvals, audit history), not the actual field-level design, permission rules or migration history.",
+        "Every entity carries a soft-delete flag rather than being hard-deletable, and role is a first-class relation rather than a string on the user record, which is what makes the six-role access model centrally enforceable instead of scattered across route handlers.",
+      ],
+      diagram: `erDiagram
+    ORGANISATION ||--o{ USER : employs
+    ROLE ||--o{ USER : grants
+    USER ||--o{ MAINTENANCE_JOB : raises
+    MAINTENANCE_JOB ||--o{ APPROVAL : requires
+    MAINTENANCE_JOB ||--o{ ATTACHMENT : has
+    USER ||--o{ AUDIT_LOG : performs
+    MAINTENANCE_JOB ||--o{ AUDIT_LOG : concerns
+    ROLE {
+      int id PK
+      string name
+    }
+    MAINTENANCE_JOB {
+      int id PK
+      int raised_by FK
+      enum urgency_tier
+      enum status
+      bool is_deleted
+    }
+    APPROVAL {
+      int id PK
+      int job_id FK
+      int approved_by FK
+      enum decision
+    }`,
+    },
     features: [
       { title: "Six organisational roles", description: "Including regional manager, store manager, engineer, accounts and system admin, each with distinct permissions." },
       { title: "Priority-based approval workflow", description: "Immediate (three-hour), 48-hour and one-week maintenance categories, each with its own approval path." },
@@ -347,6 +378,7 @@ export const projects: Project[] = [
       { title: "Access-level administration", description: "Permissions are administered per role rather than hard-coded per page, keeping access control centralised and auditable." },
       { title: "Soft delete as a first-class pattern", description: "Deletion and restoration are both explicit, logged operations — nothing disappears silently." },
       { title: "Solo scope management", description: "Built independently within a fixed final-year timeline — a deliberate tradeoff scoping six roles and a full workflow deeply, rather than more roles shallowly." },
+      { title: "Managed backend over self-hosted", description: "Supabase-managed PostgreSQL over a self-hosted database — a tradeoff trading some infrastructure control for the deployment and backup velocity a solo developer needs under a deadline." },
     ],
     challenges: [
       { title: "Modelling six distinct roles cleanly", description: "With six organisational roles spanning stores, regions, contractors and accounts, keeping access control centralised (rather than scattered per-page checks) took deliberate up-front design." },
@@ -417,11 +449,11 @@ export const projects: Project[] = [
       "Built and maintain a commercial charter company's customer-facing website — private jets, helicopters and yachts — for the client on WordPress and Elementor, via a custom PHP layer that generates page layouts programmatically instead of hand-editing each one.",
     proofPoints: {
       role: "Freelance developer engaged directly by the client for design, build and ongoing support — sole developer on the engagement.",
-      scope: "Delivered the full site (homepage, aircraft/yacht pages, empty legs, charter enquiry flow) and built the tooling that generates it.",
-      depth: "A custom PHP library of design-token constants and section/widget builders that compose Elementor layouts programmatically, keeping a growing page set visually consistent without manual per-page editing.",
+      scope: "Delivered all 14 pages of the live site (homepage, private jets, helicopter, yacht, empty legs, charter request, about, contact, FAQs, careers, blog, privacy, terms) and built the PHP tooling that generates them.",
+      depth: "A page-generation library of composable widget and section builders (HERO, SECTION, CTA_BANNER, FEATURE_ROW and similar) driven by shared design-token constants, plus a save path that correctly escapes Elementor's JSON so pages don't silently corrupt.",
     },
     metrics: [
-      { label: "Engagement", value: "Client contract" },
+      { label: "Pages", value: "14 generated" },
       { label: "Platform", value: "WordPress" },
       { label: "Delivery", value: "Requirements → deploy" },
     ],
@@ -467,10 +499,12 @@ export const projects: Project[] = [
     implementation: [
       { title: "Direct client requirements work", description: "Translated business needs into a responsive site through direct client collaboration." },
       { title: "Reusable builders over hand-editing", description: "A shared PHP library of section/widget builders keeps the growing page set visually consistent — an upfront investment traded against faster one-off page edits." },
+      { title: "Correct JSON escaping on save", description: "A single save function applies WordPress's slashing rules correctly before every write, since Elementor's page data is JSON stored as post meta — get that wrong and the visual editor breaks silently with no error." },
       { title: "Managed hosting deployment", description: "Deployed and maintained on the client's managed WordPress hosting." },
     ],
     challenges: [
       { title: "Keeping many pages visually consistent", description: "As the page count grew, hand-editing invited drift. Moving the design into reusable, code-level builders kept every page consistent and fast to update." },
+      { title: "Elementor's JSON is fragile", description: "A missing element ID, wrong element type, or unescaped character breaks the visual editor with no error message. Routing every write through one validated save function, instead of raw writes per page, eliminated that class of bug entirely." },
       { title: "Translating a non-technical brief into a build", description: "Regular direct communication with the client turned an informal brief into a concrete, professional site." },
     ],
     results: [
@@ -596,6 +630,7 @@ export const projects: Project[] = [
       { title: "Usability & accessibility by design", description: "Nielsen usability heuristics and WCAG accessibility considerations applied to a responsive interface." },
     ],
     implementation: [
+      { title: "Vanilla stack by deliberate choice", description: "No framework, chosen so the module assessment could evaluate my own handling of routing, auth and data access directly, rather than a framework's — a tradeoff of more boilerplate for more visible fundamentals." },
       { title: "AJAX over the PHP backend", description: "The live-search fetches filtered results asynchronously, demonstrating JS + AJAX + PHP working together." },
       { title: "Soft delete over hard delete", description: "Deleting sets a timestamp and moves the recipe to Trash, so it stays recoverable." },
       { title: "Usability heuristics applied deliberately", description: "Nielsen's heuristics informed concrete decisions — visible system status on save/delete, clear error prevention on required fields." },
@@ -603,6 +638,7 @@ export const projects: Project[] = [
     challenges: [
       { title: "Building the live-search", description: "Wiring JavaScript, AJAX and the PHP backend so the table filters smoothly without a reload took careful handling of requests and rendering." },
       { title: "Applying usability heuristics concretely", description: "Turning Nielsen's heuristics into specific interface decisions, rather than a checklist, shaped the create/edit flow and its feedback states." },
+      { title: "Balancing scope against a fixed deadline", description: "Working solo against a module deadline meant choosing depth on core CRUD, search and accessibility over breadth — features like tagging were deliberately deferred rather than half-built." },
     ],
     results: [
       "A working, deployed recipe web app with a polished public site and a full admin CRUD area.",
