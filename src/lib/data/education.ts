@@ -14,9 +14,9 @@ export const education: EducationItem[] = [
   {
     qualification: "BSc (Hons) Computer Science",
     institution: "Arden University, UK",
-    period: "2023 — 2026",
+    period: "2023 – 2026",
     summary:
-      "A Computer Science degree grounded in software engineering, databases, security and systems design — applied throughout in real, deployed projects rather than throwaway exercises.",
+      "A Computer Science degree grounded in software engineering, databases, security and systems design, applied throughout in real, deployed projects rather than throwaway exercises.",
     modules: [
       "Software Engineering",
       "Web Application Development",
@@ -28,9 +28,9 @@ export const education: EducationItem[] = [
       "Human Computer Interaction",
     ],
     finalYearProject: {
-      title: "Final Year Project — Design and Implementation of a Secure Cloud-Based Maintenance Management System",
+      title: "Final Year Project: Design and Implementation of a Secure Cloud-Based Maintenance Management System",
       description:
-        "Designed and built OpFix, a secure enterprise-style maintenance management platform with six organisational roles, role-based access control and end-to-end approval workflows. The dissertation covered requirements analysis, system design, implementation, testing and a critical evaluation against the original objectives — later reworked into a public case study now being prepared for future commercialisation.",
+        "Designed and built OpFix, a secure enterprise-style maintenance management platform with six organisational roles, role-based access control and end-to-end approval workflows. The dissertation covered requirements analysis, system design, implementation, testing and a critical evaluation against the original objectives, later reworked into a public case study now being prepared for future commercialisation.",
     },
   },
 ];

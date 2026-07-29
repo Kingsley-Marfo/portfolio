@@ -9,7 +9,7 @@ import { allProjectsSorted } from "@/lib/data/projects";
 export const metadata: Metadata = {
   title: "Projects",
   description:
-    "In-depth technical case studies — Flayona (FinTech), OpFix (enterprise), Julli Jets (client) and a full-stack Recipe Management System.",
+    "In-depth technical case studies: Flayona (FinTech), OpFix (enterprise), Julli Jets (client) and a full-stack Recipe Management System.",
 };
 
 export default function ProjectsPage() {

@@ -49,7 +49,7 @@ export async function generateMetadata({
     description: project.tagline,
     alternates: { canonical: `/projects/${project.slug}` },
     openGraph: {
-      title: `${project.title} — Case study`,
+      title: `${project.title}: Case study`,
       description: project.tagline,
     },
   };
@@ -222,8 +222,8 @@ export default async function CaseStudyPage({
             <p className="mt-4 flex max-w-2xl items-start gap-2 rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
               <Lock className="mt-0.5 size-4 shrink-0" />
               {project.status === "Client Project"
-                ? "Client-confidential project — source code and internal implementation are not published. This case study covers my engineering contribution, the problem solved and the technologies used."
-                : "Private repository — this project is being prepared for future commercialisation, so internal implementation details are not published here."}
+                ? "Client-confidential project: source code and internal implementation are not published. This case study covers my engineering contribution, the problem solved and the technologies used."
+                : "Private repository: this project is being prepared for future commercialisation, so internal implementation details are not published here."}
             </p>
           ) : null}
 
@@ -352,7 +352,7 @@ export default async function CaseStudyPage({
         <details className="group min-w-0" open>
           <summary className="flex cursor-pointer list-none items-center gap-2 rounded-xl border border-border bg-card px-5 py-4 text-sm font-semibold marker:content-none">
             <ChevronDown className="size-4 shrink-0 text-primary transition-transform group-open:rotate-180" />
-            Technical deep dive — architecture, database, engineering decisions
+            Technical deep dive: architecture, database, engineering decisions
             <span className="ml-auto text-xs font-normal text-muted-foreground">
               For technical reviewers
             </span>

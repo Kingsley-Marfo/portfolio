@@ -12,27 +12,27 @@ export type ExperienceItem = {
 /** Software engineering experience is presented first, leadership second. */
 export const engineeringExperience: ExperienceItem[] = [
   {
-    role: "Freelance Software Developer — Flayona (Client Project)",
+    role: "Freelance Software Developer, Flayona (Client Project)",
     organisation: "Flayona",
     type: "engineering",
-    period: "2025 — Present",
+    period: "2025 – Present",
     summary:
-      "Designed and deployed a production multi-vendor e-commerce and FinTech platform for a commercial client — distributor-specific pricing, variant-level inventory, region-based fulfilment, and a configurable Buy-Now-Pay-Later lending system, in vanilla PHP and MySQL.",
+      "Designed and deployed a production multi-vendor e-commerce and FinTech platform for a commercial client: distributor-specific pricing, variant-level inventory, region-based fulfilment, and a configurable Buy-Now-Pay-Later lending system, in vanilla PHP and MySQL.",
     highlights: [
       "Delivered a configurable BNPL lending system with KYC onboarding, 1–24 month repayment terms, tiered flat-interest pricing (0–22%), automated instalment scheduling and capped, non-compounding late fees.",
       "Integrated Paystack card and Mobile Money payments using HMAC-SHA512 webhook verification, idempotent processing and race-safe transaction reconciliation.",
-      "Engineered four secure authentication domains — customers, distributors, administrators and Credit Officers — with TOTP two-factor authentication, account lockout, passwordless OTP and role-based access control.",
+      "Engineered four secure authentication domains (customers, distributors, administrators and Credit Officers) with TOTP two-factor authentication, account lockout, passwordless OTP and role-based access control.",
       "Implemented secure handling of Ghana Cards, payslips, selfies and KYC information using private storage and ownership-checked, authenticated access.",
     ],
     stack: ["PHP", "MySQL", "Paystack API", "WhatsApp Cloud API", "PWA"],
   },
   {
-    role: "Full-Stack Developer — OpFix (Final Year Project)",
+    role: "Full-Stack Developer, OpFix (Final Year Project)",
     organisation: "OpFix",
     type: "engineering",
     period: "2026",
     summary:
-      "Designed and deployed a secure, enterprise-style cloud-based maintenance management platform as my BSc final-year project — six organisational roles, end-to-end maintenance workflows, and a FastAPI + PostgreSQL backend behind a React SPA. Now being prepared for future commercialisation.",
+      "Designed and deployed a secure, enterprise-style cloud-based maintenance management platform as my BSc final-year project: six organisational roles, end-to-end maintenance workflows, and a FastAPI + PostgreSQL backend behind a React SPA. Now being prepared for future commercialisation.",
     highlights: [
       "Modelled relational data structures for organisations, users, maintenance jobs, quotes, approvals, attachments and audit history.",
       "Implemented role-based access control, access-level administration, audit logging, and soft deletion with restoration.",
@@ -42,7 +42,7 @@ export const engineeringExperience: ExperienceItem[] = [
     stack: ["FastAPI", "PostgreSQL", "React", "Vite", "Supabase"],
   },
   {
-    role: "Freelance Web Developer — Julli Jets (Client Project)",
+    role: "Freelance Web Developer, Julli Jets (Client Project)",
     organisation: "Julli Jets",
     type: "engineering",
     period: "Client engagement",
@@ -62,7 +62,7 @@ export const leadershipExperience: ExperienceItem[] = [
     role: "Restaurant Manager",
     organisation: "Burger King UK",
     type: "leadership",
-    period: "2023 — Present",
+    period: "2023 – Present",
     summary:
       "Lead a team of more than 30 employees in a high-volume quick-service restaurant, alongside freelance software development and completing a BSc in Computer Science.",
     highlights: [
@@ -76,7 +76,7 @@ export const leadershipExperience: ExperienceItem[] = [
     role: "Department Manager",
     organisation: "Moto Hospitality Ltd",
     type: "leadership",
-    period: "2022 — 2023",
+    period: "2022 – 2023",
     summary:
       "Led and trained front-line teams in a busy motorway service environment, managing daily operational performance, digital systems and reporting.",
     highlights: [
@@ -88,7 +88,7 @@ export const leadershipExperience: ExperienceItem[] = [
     role: "Shift Manager → Assistant Manager → Restaurant Manager",
     organisation: "Burger King UK",
     type: "leadership",
-    period: "2016 — 2022",
+    period: "2016 – 2022",
     summary:
       "Progressed through increasingly senior management roles over six years, from Shift Manager to Restaurant Manager.",
     highlights: [

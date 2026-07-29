@@ -11,14 +11,14 @@ UI. It's worth getting right.
 
 ## Model invariants as constraints
 
-If an instalment cannot exist without a plan, enforce that with a foreign key —
+If an instalment cannot exist without a plan, enforce that with a foreign key,
 don't rely on application code to remember. The database is the last line of
 defence against impossible states.
 
 ## Normalise until it hurts, then stop
 
 Normalise to keep data consistent and avoid duplication. Denormalise
-deliberately, only where you've measured a real read-performance need — never by
+deliberately, only where you've measured a real read-performance need, never by
 default.
 
 ## Money and time are special

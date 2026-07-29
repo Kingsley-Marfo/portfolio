@@ -51,7 +51,7 @@ export function Hero() {
             animate="visible"
             className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground"
           >
-            I&apos;m {siteConfig.name} — a full-stack and backend developer
+            I&apos;m {siteConfig.name}, a full-stack and backend developer
             specialising in secure authentication, payment systems, APIs,
             scalable web applications and business workflow automation.
           </motion.p>

@@ -26,7 +26,7 @@ export default function ContactPage() {
       <PageHeader
         eyebrow="Contact"
         title="Let's talk."
-        description="I'm open to Software Engineer, Full-Stack and Backend roles — and interesting projects. The fastest way to reach me is the form or email."
+        description="I'm open to Software Engineer, Full-Stack and Backend roles, and interesting projects. The fastest way to reach me is the form or email."
       />
 
       <Section>

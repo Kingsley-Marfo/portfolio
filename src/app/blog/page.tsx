@@ -22,7 +22,7 @@ export default function BlogPage() {
       <PageHeader
         eyebrow="Writing"
         title="Notes on building production software."
-        description="Essays on the engineering decisions behind the systems I build — payments, security, architecture and the craft in between."
+        description="Essays on the engineering decisions behind the systems I build: payments, security, architecture and the craft in between."
       />
 
       <Section>

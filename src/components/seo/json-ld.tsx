@@ -29,7 +29,7 @@ export function JsonLd() {
         "@type": "WebSite",
         "@id": `${siteConfig.url}/#website`,
         url: siteConfig.url,
-        name: `${siteConfig.name} — ${siteConfig.role}`,
+        name: `${siteConfig.name}, ${siteConfig.role}`,
         description: siteConfig.summary,
         publisher: { "@id": `${siteConfig.url}/#person` },
       },

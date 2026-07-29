@@ -89,7 +89,7 @@ export async function POST(request: Request) {
       });
 
       await transporter.sendMail({
-        from: `"${siteConfig.name} — Portfolio" <${gmailUser}>`,
+        from: `"${siteConfig.name} Portfolio" <${gmailUser}>`,
         to,
         replyTo: `"${name}" <${email}>`,
         subject: subject

@@ -33,7 +33,7 @@ export function SkillsSection() {
         <SectionHeading
           eyebrow="Technical Expertise"
           title="Languages, frameworks and practices"
-          description="Every item here is verified against production work or my CV — nothing aspirational is listed as a current skill."
+          description="Every item here is verified against production work or my CV. Nothing aspirational is listed as a current skill."
         />
 
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

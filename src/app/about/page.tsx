@@ -15,19 +15,19 @@ import { ButtonLink } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Software Engineer and BSc Computer Science graduate who also manages a 30+ person team as a Restaurant Manager — how that leadership experience shapes engineering judgement.",
+    "Software Engineer and BSc Computer Science graduate who also manages a 30+ person team as a Restaurant Manager: how that leadership experience shapes engineering judgement.",
 };
 
 const transfer = [
   {
     icon: Target,
     title: "Ownership",
-    body: "Running daily operations for a 30+ person team means outcomes are mine regardless of who's on shift. I bring that same standard to code I ship — I own it in production, not just at merge.",
+    body: "Running daily operations for a 30+ person team means outcomes are mine regardless of who's on shift. I bring that same standard to code I ship: I own it in production, not just at merge.",
   },
   {
     icon: Compass,
     title: "Decision making under pressure",
-    body: "Quick-service management is constant triage: limited time, incomplete information, real consequences. That's close to debugging a production incident — stay calm, gather signal fast, decide.",
+    body: "Quick-service management is constant triage: limited time, incomplete information, real consequences. That's close to debugging a production incident: stay calm, gather signal fast, decide.",
   },
   {
     icon: Users2,
@@ -53,11 +53,11 @@ export default function AboutPage() {
               I&apos;m {siteConfig.name}, a Software Engineer based in{" "}
               {siteConfig.location}. I specialise in full-stack and backend
               development, with a particular focus on systems where correctness
-              matters — payments, identity and access.
+              matters: payments, identity and access.
             </p>
             <p>
               I didn&apos;t come into engineering the standard way. I&apos;ve spent
-              a decade in restaurant management — starting as a Shift Manager at{" "}
+              a decade in restaurant management, starting as a Shift Manager at{" "}
               <span className="font-medium text-foreground">Burger King UK</span>{" "}
               in 2016, progressing to Restaurant Manager by 2022, a spell as
               Department Manager at{" "}
@@ -66,7 +66,7 @@ export default function AboutPage() {
               </span>
               , and back to Burger King UK as Restaurant Manager since 2023,
               where I currently lead a team of more than 30. That&apos;s not a
-              closed chapter before software — it&apos;s a demanding job I still
+              closed chapter before software. It&apos;s a demanding job I still
               hold today, alongside client development work and finishing my
               degree.
             </p>
@@ -75,13 +75,13 @@ export default function AboutPage() {
               <span className="font-medium text-foreground">
                 BSc Computer Science
               </span>{" "}
-              at Arden University, I didn&apos;t want to just pass modules — I
+              at Arden University, I didn&apos;t want to just pass modules. I
               wanted to build real things. That drive led to client work on{" "}
               <span className="font-medium text-foreground">Flayona</span>, a
               FinTech e-commerce platform with BNPL lending and secure
               authentication, and to{" "}
               <span className="font-medium text-foreground">OpFix</span>, my
-              final-year project — an enterprise maintenance management platform
+              final-year project, an enterprise maintenance management platform
               now being prepared for future commercialisation.
             </p>
             <p>

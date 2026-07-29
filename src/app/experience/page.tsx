@@ -13,7 +13,7 @@ import {
 export const metadata: Metadata = {
   title: "Experience",
   description:
-    "Professional experience — software engineering first, leadership second. FinTech, enterprise platforms and commercial client work.",
+    "Professional experience: software engineering first, leadership second. FinTech, enterprise platforms and commercial client work.",
 };
 
 export default function ExperiencePage() {
