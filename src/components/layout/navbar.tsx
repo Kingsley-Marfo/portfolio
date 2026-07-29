@@ -32,7 +32,10 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
+        // print:static — position:sticky duplicates/overlaps content at each
+        // page break when printed or exported to PDF; static positioning
+        // makes it render once, in normal document flow, at print time.
+        "sticky top-0 z-50 w-full transition-all duration-300 print:static",
         scrolled
           ? "border-b border-border bg-background/80 backdrop-blur-xl"
           : "border-b border-transparent"
@@ -98,7 +101,7 @@ export function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex size-10 items-center justify-center rounded-lg border border-border text-foreground md:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-lg border border-border text-foreground md:hidden print:hidden"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>

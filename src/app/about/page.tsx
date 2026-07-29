@@ -102,7 +102,7 @@ export default function AboutPage() {
           </Reveal>
 
           <Reveal delay={1}>
-            <div className="sticky top-24 space-y-4">
+            <div className="sticky top-24 space-y-4 print:static">
               <div className="relative aspect-4/5 overflow-hidden rounded-2xl border border-border">
                 <Image
                   src={siteConfig.avatar}

@@ -330,7 +330,7 @@ export default async function CaseStudyPage({
       {/* Deep technical dive — collapsed by default, native <details> (no JS needed) */}
       <Container className="grid gap-12 pb-20 lg:grid-cols-[220px_1fr] lg:gap-16">
         <aside className="hidden lg:block">
-          <nav className="sticky top-24">
+          <nav className="sticky top-24 print:static">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Technical deep dive
             </p>
