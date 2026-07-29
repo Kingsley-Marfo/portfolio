@@ -15,14 +15,22 @@ export function Container({
   );
 }
 
-/** Vertical rhythm wrapper for full-page sections. */
+/**
+ * Vertical rhythm wrapper for full-page sections.
+ * Mobile padding is deliberately tighter than desktop: two adjacent
+ * <Section>s each contribute top+bottom padding, so on a ~375px-wide
+ * screen the combined gap at a boundary is 2x this value — py-16 (64px)
+ * compounded to ~128px of dead space, which read as a visible empty gap
+ * between sections. py-10 keeps ~80px combined, still a clear break
+ * without the empty band.
+ */
 export function Section({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
   return (
     <section
-      className={cn("py-16 sm:py-20 lg:py-28", className)}
+      className={cn("py-10 sm:py-20 lg:py-28", className)}
       {...props}
     />
   );

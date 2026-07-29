@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
 import { projects } from "@/lib/data/projects";
-import { getAllPosts } from "@/lib/blog";
 
+// The blog is currently unlinked/hidden from navigation, so its posts are
+// intentionally left out of the sitemap too.
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
   const now = new Date();
 
-  const staticRoutes = ["", "/about", "/projects", "/experience", "/blog", "/contact"].map(
+  const staticRoutes = ["", "/about", "/projects", "/experience", "/contact"].map(
     (path) => ({
       url: `${base}${path}`,
       lastModified: now,
@@ -23,12 +24,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const postRoutes = getAllPosts().map((post) => ({
-    url: `${base}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: "yearly" as const,
-    priority: 0.6,
-  }));
-
-  return [...staticRoutes, ...projectRoutes, ...postRoutes];
+  return [...staticRoutes, ...projectRoutes];
 }
